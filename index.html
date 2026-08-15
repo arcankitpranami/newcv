@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Resume | Ankit Kumar</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: "Quicksand", Arial, sans-serif;
+            color: rgba(0, 0, 0, 0.55);
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #111;
+            font-family: "Quicksand", Arial, sans-serif;
+            font-weight: 500;
+        }
+
+
+        /* =====================================================
+           SCROLLBAR
+        ===================================================== */
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+
+            display: flex;
+        }
+
+
+        /* =====================================================
+           LEFT SIDEBAR
+        ===================================================== */
+
+        .left-content {
+            width: 330px;
+            min-width: 330px;
+            height: 100vh;
+
+            background: #ffffff;
+
+            border-right: 1px solid #eeeeee;
+
+            padding: 35px 40px;
+
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+            z-index: 10;
+        }
+
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .logo {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .logo a {
+            width: 165px;
+            height: 104px;
+
+            background: #000000;
+            color: #ffffff;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            font-family: "Roboto", Arial, sans-serif;
+
+            font-size: 20px;
+            font-weight: 400;
+
+            text-transform: uppercase;
+
+            letter-spacing: 5px;
+
+            line-height: 35px;
+        }
+
+        .logo a span {
+            display: block;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .nav {
+            flex: 1;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .nav ul {
+            width: 100%;
+        }
+
+        .nav ul li {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nav ul li a {
+            position: relative;
+
+            padding: 8px 0;
+
+            color: rgba(0, 0, 0, 0.40);
+
+            font-size: 13px;
+            font-weight: 500;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            transition: 0.3s ease;
+        }
+
+        .nav ul li a:hover {
+            color: #000000;
+            transform: translateX(-5px);
+        }
+
+        .nav ul li a.active {
+            color: #000000;
+            transform: translateX(-5px);
+        }
+
+        .nav ul li a::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 3px;
+
+            width: 0;
+            height: 1px;
+
+            background: #000000;
+
+            transition: 0.3s ease;
+        }
+
+        .nav ul li a:hover::after,
+        .nav ul li a.active::after {
+            width: 100%;
+        }
+
+
+        /* =====================================================
+           SIDEBAR FOOTER
+        ===================================================== */
+
+        .left-footer {
+            text-align: right;
+        }
+
+        .social-icons ul {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .social-icons ul li a {
+            padding: 5px 8px;
+
+            font-size: 16px;
+
+            display: block;
+
+            transition: 0.3s ease;
+        }
+
+        .social-icons ul li a:hover {
+            color: #000000;
+            transform: translateY(-4px) scale(1.15);
+        }
+
+        .foot-contact {
+            margin: 12px 0;
+        }
+
+        .foot-contact li {
+            margin: 4px 0;
+            font-size: 11px;
+        }
+
+        .copy-rights {
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT AREA
+        ===================================================== */
+
+        .main-content {
+            flex: 1;
+
+            width: calc(100% - 330px);
+            height: 100vh;
+
+            background: #ffffff;
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+
+        /* =====================================================
+           ALL SECTIONS
+        ===================================================== */
+
+        .cv-section {
+            width: 100%;
+            height: 100%;
+
+            padding: 45px 60px;
+
+            display: none;
+
+            /*
+               Main magic:
+               content ko vertical + horizontal center
+               karta hai.
+            */
+
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            overflow-y: auto;
+
+            opacity: 0;
+        }
+
+        .cv-section.active-section {
+            display: flex;
+
+            animation: pageShow 0.55s ease forwards;
+        }
+
+
+        /* =====================================================
+           PAGE ANIMATION
+        ===================================================== */
+
+        @keyframes pageShow {
+
+            0% {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ===================================================== */
+
+        .sec-title {
+            width: 100%;
+            max-width: 1050px;
+
+            margin-bottom: 45px;
+        }
+
+        .pg-sub-title {
+            display: block;
+
+            margin-bottom: 9px;
+
+            color: #999999;
+
+            font-size: 10px;
+
+            font-weight: 500;
+
+            text-transform: uppercase;
+
+            letter-spacing: 5px;
+        }
+
+        .pg-title {
+            color: #000000;
+
+            font-size: 20px;
+
+            font-weight: 500;
+
+            text-transform: uppercase;
+
+            letter-spacing: 5px;
+        }
+
+
+        /* =====================================================
+           HOME
+        ===================================================== */
+
+        .home-wrapper {
+            width: 100%;
+            max-width: 1050px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 65px;
+        }
+
+        .user-img {
+            flex: 1;
+        }
+
+        .user-img img {
+            width: 100%;
+            max-width: 470px;
+
+            border-radius: 4px;
+        }
+
+        .user-profile {
+            flex: 1;
+        }
+
+        .sm-text {
+            color: #222222;
+
+            font-family: "Roboto", Arial, sans-serif;
+
+            font-size: 14px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+        }
+
+        .name {
+            margin: 15px 0;
+
+            color: #222222;
+
+            font-family: "Roboto", Arial, sans-serif;
+
+            font-size: 40px;
+
+            font-weight: 600;
+
+            line-height: 1.2;
+
+            text-transform: uppercase;
+        }
+
+        .role {
+            margin-bottom: 20px;
+
+            color: #222222;
+
+            font-family: "Roboto", Arial, sans-serif;
+
+            font-size: 18px;
+
+            font-weight: 500;
+
+            text-transform: uppercase;
+        }
+
+        .text {
+            max-width: 500px;
+
+            font-size: 14px;
+
+            color: #888888;
+        }
+
+
+        /* =====================================================
+           PERSONAL DETAILS
+        ===================================================== */
+
+        .pr-list {
+            margin: 25px 0;
+        }
+
+        .pr-list li {
+            margin-bottom: 11px;
+
+            color: #888888;
+
+            font-size: 13px;
+        }
+
+        .pr-list li i {
+            width: 23px;
+
+            color: #333333;
+        }
+
+
+        /* =====================================================
+           PROFILE SOCIAL
+        ===================================================== */
+
+        .social-icons-head ul {
+            display: flex;
+        }
+
+        .social-icons-head ul li a {
+            padding: 5px 10px;
+
+            font-size: 21px;
+
+            color: #777777;
+
+            display: flex;
+
+            transition: 0.3s ease;
+        }
+
+        .social-icons-head ul li:first-child a {
+            padding-left: 0;
+        }
+
+        .social-icons-head ul li a:hover {
+            color: #000000;
+
+            transform:
+                translateY(-4px)
+                scale(1.15);
+        }
+
+
+        /* =====================================================
+           ABOUT
+        ===================================================== */
+
+        .about-content {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .about-content h2 {
+            margin-bottom: 22px;
+
+            font-size: 28px;
+        }
+
+        .about-content h3 {
+            margin: 30px 0 20px;
+
+            font-size: 21px;
+        }
+
+        .about-content p {
+            color: #888888;
+
+            font-size: 14px;
+        }
+
+        .strength-list li {
+            padding: 12px 0;
+
+            border-bottom: 1px solid #eeeeee;
+
+            color: #777777;
+
+            font-size: 14px;
+        }
+
+        .strength-list li i {
+            width: 25px;
+
+            color: #000000;
+        }
+
+
+        /* =====================================================
+           WORK PROFILE
+        ===================================================== */
+
+        .work-content {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .work-content h2 {
+            margin-bottom: 15px;
+
+            font-size: 28px;
+        }
+
+        .work-content h3 {
+            margin: 30px 0 25px;
+
+            font-size: 21px;
+        }
+
+        .skills {
+            width: 100%;
+        }
+
+        .skill {
+            margin-bottom: 22px;
+        }
+
+        .skill-name {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            color: #555555;
+
+            font-size: 13px;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 5px;
+
+            background: #eeeeee;
+        }
+
+        .skill-progress {
+            height: 100%;
+
+            background: #000000;
+
+            width: 0;
+
+            transition: width 1s ease;
+        }
+
+        .active-section .html {
+            width: 90%;
+        }
+
+        .active-section .css {
+            width: 85%;
+        }
+
+        .active-section .javascript {
+            width: 70%;
+        }
+
+        .active-section .photoshop {
+            width: 80%;
+        }
+
+        .active-section .wordpress {
+            width: 85%;
+        }
+
+
+        /* =====================================================
+           PORTFOLIO
+        ===================================================== */
+
+        .portfolio-grid {
+            width: 100%;
+            max-width: 900px;
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 22px;
+        }
+
+        .project {
+            padding: 28px;
+
+            border: 1px solid #eeeeee;
+
+            background: #ffffff;
+
+            transition: 0.3s ease;
+        }
+
+        .project:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.07);
+        }
+
+        .project i {
+            margin-bottom: 15px;
+
+            font-size: 28px;
+
+            color: #222222;
+        }
+
+        .project h3 {
+            margin-bottom: 10px;
+
+            font-size: 19px;
+        }
+
+        .project p {
+            margin-bottom: 0;
+
+            color: #888888;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           EDUCATION
+        ===================================================== */
+
+        .timeline {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .timeline-item {
+            margin-bottom: 28px;
+
+            padding:
+                0 0 25px 25px;
+
+            border-left: 2px solid #000000;
+        }
+
+        .timeline-item span {
+            color: #999999;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+        }
+
+        .timeline-item h3 {
+            margin: 8px 0;
+
+            font-size: 21px;
+        }
+
+        .timeline-item p {
+            color: #888888;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           CONTACT
+        ===================================================== */
+
+        .contact-content {
+            width: 100%;
+            max-width: 750px;
+        }
+
+        .contact-content h2 {
+            margin-bottom: 18px;
+
+            font-size: 28px;
+        }
+
+        .contact-content > p {
+            color: #888888;
+
+            font-size: 14px;
+        }
+
+        .contact-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 18px 0;
+
+            border-bottom: 1px solid #eeeeee;
+
+            font-size: 14px;
+        }
+
+        .contact-item i {
+            width: 25px;
+
+            color: #222222;
+
+            font-size: 18px;
+        }
+
+        .contact-item a:hover {
+            color: #000000;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .left-content {
+                width: 270px;
+                min-width: 270px;
+
+                padding: 30px;
+            }
+
+            .main-content {
+                width: calc(100% - 270px);
+            }
+
+            .cv-section {
+                padding: 40px;
+            }
+
+            .home-wrapper {
+                gap: 35px;
+            }
+
+            .name {
+                font-size: 34px;
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            body {
+                overflow: auto;
+            }
+
+            .container {
+                height: auto;
+
+                flex-direction: column;
+            }
+
+            .left-content {
+                width: 100%;
+                min-width: 100%;
+
+                height: auto;
+
+                padding: 20px;
+
+                border-right: none;
+                border-bottom: 1px solid #eeeeee;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .nav {
+                margin: 25px 0;
+
+                display: block;
+            }
+
+            .nav ul {
+                display: flex;
+
+                justify-content: center;
+
+                flex-wrap: wrap;
+
+                gap: 5px 18px;
+            }
+
+            .nav ul li {
+                display: block;
+            }
+
+            .nav ul li a {
+                font-size: 10px;
+            }
+
+            .left-footer {
+                text-align: center;
+            }
+
+            .social-icons ul {
+                justify-content: center;
+            }
+
+            .main-content {
+                width: 100%;
+
+                height: auto;
+
+                min-height: 80vh;
+
+                overflow: visible;
+            }
+
+            /*
+               Mobile par content ko top se start
+               karenge.
+            */
+
+            .cv-section {
+                width: 100%;
+
+                height: auto;
+
+                min-height: 80vh;
+
+                padding: 40px 22px;
+
+                align-items: flex-start;
+                justify-content: flex-start;
+
+                overflow: visible;
+            }
+
+            .home-wrapper {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 35px;
+            }
+
+            .user-img {
+                width: 100%;
+            }
+
+            .user-img img {
+                max-width: 450px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 500px) {
+
+            .logo a {
+                width: 150px;
+                height: 95px;
+            }
+
+            .cv-section {
+                padding: 30px 18px;
+            }
+
+            .sec-title {
+                margin-bottom: 35px;
+            }
+
+            .pg-title {
+                font-size: 17px;
+                letter-spacing: 3px;
+            }
+
+            .name {
+                font-size: 28px;
+            }
+
+            .role {
+                font-size: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="wrapper">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             LEFT SIDE
+        ================================================== -->
+
+        <aside class="left-content">
+
+
+            <!-- LOGO -->
+
+            <div class="logo">
+
+                <a href="#Home">
+
+                    <span>MY</span>
+                    <span>RESUME</span>
+
+                </a>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="nav">
+
+                <ul>
+
+                    <li>
+                        <a href="#Home" class="active">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#About">
+                            About
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#Work">
+                            Work Profile
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#Portfolio">
+                            Portfolio
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#Education">
+                            Education
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#Contact">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+
+            <!-- FOOTER -->
+
+            <div class="left-footer">
+
+
+                <div class="social-icons">
+
+                    <ul>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-linkedin-square"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="foot-contact">
+
+                    <ul>
+
+                        <li>
+                            ankitpranami001@gmail.com
+                        </li>
+
+                        <li>
+                            +9187**9907**
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="copy-rights">
+
+                    Copyright © 2026 All rights reserved
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             RIGHT MAIN CONTENT
+        ================================================== -->
+
+        <main class="main-content">
+
+
+            <!-- =================================================
+                 HOME
+            ================================================== -->
+
+            <section
+                id="Home"
+                class="cv-section active-section"
+            >
+
+                <div class="sec-title">
+
+                    <div class="pg-sub-title">
+                        HOME
+                    </div>
+
+                    <div class="pg-title">
+                        MY PROFILE
+                    </div>
+
+                </div>
+
+
+                <div class="home-wrapper">
+
+
+                    <div class="user-img">
+
+                        <img
+                            src="https://colorlib.com/preview/theme/meetme/img/personal.jpg"
+                            alt="Ankit Kumar"
+                        >
+
+                    </div>
+
+
+                    <div class="user-profile">
+
+                        <div class="sm-text">
+                            HELLO EVERYBODY, I AM
+                        </div>
+
+
+                        <div class="name">
+                            ANKIT KUMAR
+                        </div>
+
+
+                        <div class="role">
+                            FRONTEND DEVELOPER
+                        </div>
+
+
+                        <div class="text">
+
+                            I am a passionate Frontend Developer
+                            who creates modern, responsive and
+                            user-friendly websites.
+
+                            I work with HTML, CSS, JavaScript,
+                            Photoshop and WordPress.
+
+                        </div>
+
+
+                        <div class="pr-list">
+
+                            <ul>
+
+                                <li>
+                                    <i class="fa fa-phone"></i>
+                                    +9187**9907**
+                                </li>
+
+                                <li>
+                                    <i class="fa fa-envelope"></i>
+                                    ankitpranami001@gmail.com
+                                </li>
+
+                                <li>
+                                    <i class="fa fa-map-marker"></i>
+                                    India
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+
+                        <div class="social-icons-head">
+
+                            <ul>
+
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-linkedin-square"></i>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-facebook"></i>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-instagram"></i>
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ABOUT
+            ================================================== -->
+
+            <section
+                id="About"
+                class="cv-section"
+            >
+
+                <div class="sec-title">
+
+                    <div class="pg-sub-title">
+                        ABOUT
+                    </div>
+
+                    <div class="pg-title">
+                        ABOUT ME
+                    </div>
+
+                </div>
+
+
+                <div class="about-content">
+
+                    <h2>
+                        Hello, I'm Ankit Kumar
+                    </h2>
+
+
+                    <p>
+                        I am a passionate Frontend Developer
+                        interested in creating modern, clean
+                        and responsive websites.
+                    </p>
+
+
+                    <p>
+                        I create attractive user interfaces
+                        using HTML, CSS and JavaScript.
+                    </p>
+
+
+                    <p>
+                        I also work with Photoshop, WordPress
+                        and Elementor for website design and
+                        development.
+                    </p>
+
+
+                    <h3>
+                        My Strengths
+                    </h3>
+
+
+                    <ul class="strength-list">
+
+                        <li>
+                            <i class="fa fa-check"></i>
+                            Responsive Web Design
+                        </li>
+
+                        <li>
+                            <i class="fa fa-check"></i>
+                            HTML & CSS
+                        </li>
+
+                        <li>
+                            <i class="fa fa-check"></i>
+                            JavaScript
+                        </li>
+
+                        <li>
+                            <i class="fa fa-check"></i>
+                            Photoshop
+                        </li>
+
+                        <li>
+                            <i class="fa fa-check"></i>
+                            WordPress & Elementor
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 WORK PROFILE
+            ================================================== -->
+
+            <section
+                id="Work"
+                class="cv-section"
+            >
+
+                <div class="sec-title">
+
+                    <div class="pg-sub-title">
+                        WORK PROFILE
+                    </div>
+
+                    <div class="pg-title">
+                        MY SKILLS
+                    </div>
+
+                </div>
+
+
+                <div class="work-content">
+
+                    <h2>
+                        Frontend Developer
+                    </h2>
+
+
+                    <p>
+                        I create responsive websites,
+                        landing pages and modern user
+                        interfaces.
+                    </p>
+
+
+                    <h3>
+                        Technical Skills
+                    </h3>
+
+
+                    <div class="skills">
+
+
+                        <div class="skill">
+
+                            <div class="skill-name">
+                                <span>HTML</span>
+                                <span>90%</span>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-progress html"></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="skill">
+
+                            <div class="skill-name">
+                                <span>CSS</span>
+                                <span>85%</span>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-progress css"></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="skill">
+
+                            <div class="skill-name">
+                                <span>JavaScript</span>
+                                <span>70%</span>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-progress javascript"></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="skill">
+
+                            <div class="skill-name">
+                                <span>Photoshop</span>
+                                <span>80%</span>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-progress photoshop"></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="skill">
+
+                            <div class="skill-name">
+                                <span>WordPress</span>
+                                <span>85%</span>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-progress wordpress"></div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PORTFOLIO
+            ================================================== -->
+
+            <section
+                id="Portfolio"
+                class="cv-section"
+            >
+
+                <div class="sec-title">
+
+                    <div class="pg-sub-title">
+                        PORTFOLIO
+                    </div>
+
+                    <div class="pg-title">
+                        MY PROJECTS
+                    </div>
+
+                </div>
+
+
+                <div class="portfolio-grid">
+
+
+                    <div class="project">
+
+                        <i class="fa fa-laptop"></i>
+
+                        <h3>
+                            Portfolio Website
+                        </h3>
+
+                        <p>
+                            A responsive personal portfolio
+                            website created using HTML, CSS
+                            and JavaScript.
+                        </p>
+
+                    </div>
+
+
+                    <div class="project">
+
+                        <i class="fa fa-shopping-cart"></i>
+
+                        <h3>
+                            E-Commerce Website
+                        </h3>
+
+                        <p>
+                            A modern e-commerce website with
+                            responsive design and user-friendly
+                            interface.
+                        </p>
+
+                    </div>
+
+
+                    <div class="project">
+
+                        <i class="fa fa-wordpress"></i>
+
+                        <h3>
+                            WordPress Website
+                        </h3>
+
+                        <p>
+                            WordPress websites designed and
+                            customized using Elementor.
+                        </p>
+
+                    </div>
+
+
+                    <div class="project">
+
+                        <i class="fa fa-code"></i>
+
+                        <h3>
+                            Frontend Projects
+                        </h3>
+
+                        <p>
+                            Various HTML, CSS and JavaScript
+                            projects and landing pages.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 EDUCATION
+            ================================================== -->
+
+            <section
+                id="Education"
+                class="cv-section"
+            >
+
+                <div class="sec-title">
+
+                    <div class="pg-sub-title">
+                        EDUCATION
+                    </div>
+
+                    <div class="pg-title">
+                        MY EDUCATION
+                    </div>
+
+                </div>
+
+
+                <div class="timeline">
+
+
+                    <div class="timeline-item">
+
+                        <span>
+                            EDUCATION
+                        </span>
+
+                        <h3>
+                            Academic Qualification
+                        </h3>
+
+                        <p>
+                            Add your qualification, school or
+                            college name and passing year here.
+                        </p>
+
+                    </div>
+
+
+                    <div class="timeline-item">
+
+                        <span>
+                            PROFESSIONAL
+                        </span>
+
+                        <h3>
+                            Web Development
+                        </h3>
+
+                        <p>
+                            Learning and working with HTML,
+                            CSS, JavaScript, WordPress and
+                            modern web technologies.
+                        </p>
+
+                    </div>
+
+
+                    <div class="timeline-item">
+
+                        <span>
+                            CURRENT LEARNING
+                        </span>
+
+                        <h3>
+                            Frontend Development
+                        </h3>
+
+                        <p>
+                            Continuously improving frontend
+                            development and responsive design
+                            skills.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CONTACT
+            ================================================== -->
+
+            <section
+                id="Contact"
+                class="cv-section"
+            >
+
+                <div class="sec-title">
+
+                    <div class="pg-sub-title">
+                        CONTACT
+                    </div>
+
+                    <div class="pg-title">
+                        CONTACT ME
+                    </div>
+
+                </div>
+
+
+                <div class="contact-content">
+
+                    <h2>
+                        Let's Work Together
+                    </h2>
+
+
+                    <p>
+                        If you have a project or website idea,
+                        feel free to contact me.
+                    </p>
+
+
+                    <div class="contact-item">
+
+                        <i class="fa fa-envelope"></i>
+
+                        <a href="mailto:ankitpranami001@gmail.com">
+                            ankitpranami001@gmail.com
+                        </a>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <i class="fa fa-phone"></i>
+
+                        <span>
+                            +9187**9907**
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <i class="fa fa-map-marker"></i>
+
+                        <span>
+                            India
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    /* =====================================================
+       MENU
+    ===================================================== */
+
+    const menuLinks =
+        document.querySelectorAll(".nav a");
+
+    const sections =
+        document.querySelectorAll(".cv-section");
+
+
+    /* =====================================================
+       SHOW SELECTED PAGE
+    ===================================================== */
+
+    function showSection(sectionId) {
+
+        /* Hide all pages */
+
+        sections.forEach(function(section) {
+
+            section.classList.remove(
+                "active-section"
+            );
+
+        });
+
+
+        /* Remove active menu */
+
+        menuLinks.forEach(function(link) {
+
+            link.classList.remove("active");
+
+        });
+
+
+        /* Find selected section */
+
+        const selectedSection =
+            document.getElementById(sectionId);
+
+
+        /* Find selected menu */
+
+        const selectedMenu =
+            document.querySelector(
+                '.nav a[href="#' + sectionId + '"]'
+            );
+
+
+        if (selectedSection) {
+
+            selectedSection.classList.add(
+                "active-section"
+            );
+
+            /*
+               Har baar page open hone par
+               scroll top par reset.
+            */
+
+            selectedSection.scrollTop = 0;
+
+        }
+
+
+        if (selectedMenu) {
+
+            selectedMenu.classList.add("active");
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MENU CLICK
+    ===================================================== */
+
+    menuLinks.forEach(function(link) {
+
+        link.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const sectionId =
+                    this.getAttribute("href")
+                    .substring(1);
+
+
+                showSection(sectionId);
+
+
+                history.replaceState(
+                    null,
+                    null,
+                    "#" + sectionId
+                );
+
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       LOGO CLICK
+    ===================================================== */
+
+    document
+        .querySelector(".logo a")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+
+                showSection("Home");
+
+
+                history.replaceState(
+                    null,
+                    null,
+                    "#Home"
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       PAGE LOAD
+    ===================================================== */
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            const hash =
+                window.location.hash;
+
+
+            if (hash) {
+
+                const sectionId =
+                    hash.substring(1);
+
+
+                if (
+                    document.getElementById(sectionId)
+                ) {
+
+                    showSection(sectionId);
+
+                } else {
+
+                    showSection("Home");
+
+                }
+
+            } else {
+
+                showSection("Home");
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
