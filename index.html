@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -18,28 +18,64 @@
     >
 
     <style>
+        :root {
+            --bg-body: #ffffff;
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #eeeeee;
+            --text-main: #111111;
+            --text-muted: rgba(0, 0, 0, 0.55);
+            --text-light: #888888;
+            --card-bg: #ffffff;
+            --border-color: #eeeeee;
+            --primary: #000000;
+            --primary-inv: #ffffff;
+            --input-bg: #ffffff;
+            --badge-bg: #ef4444;
+        }
 
-        /* =====================================================
-           RESET
-        ===================================================== */
+        [data-theme="dark"] {
+            --bg-body: #0b0f19;
+            --sidebar-bg: #111827;
+            --sidebar-border: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --text-light: #6b7280;
+            --card-bg: #1f2937;
+            --border-color: #374151;
+            --primary: #6366f1;
+            --primary-inv: #ffffff;
+            --input-bg: #1f2937;
+            --badge-bg: #ef4444;
+        }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
-        html,
-        body {
+        input, textarea {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+
+        html, body {
             width: 100%;
             height: 100%;
         }
 
         body {
             font-family: "Quicksand", Arial, sans-serif;
-            color: rgba(0, 0, 0, 0.55);
-            background: #ffffff;
+            color: var(--text-muted);
+            background: var(--bg-body);
             overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         a {
@@ -47,8 +83,7 @@
             color: inherit;
         }
 
-        ul,
-        li {
+        ul, li {
             margin: 0;
             padding: 0;
             list-style: none;
@@ -58,6 +93,7 @@
             max-width: 100%;
             height: auto;
             display: block;
+            pointer-events: none;
         }
 
         p {
@@ -65,38 +101,23 @@
             margin-bottom: 20px;
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            color: #111;
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-main);
             font-family: "Quicksand", Arial, sans-serif;
             font-weight: 500;
         }
-
-
-        /* =====================================================
-           SCROLLBAR
-        ===================================================== */
 
         ::-webkit-scrollbar {
             width: 5px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f5f5f5;
+            background: var(--bg-body);
         }
 
         ::-webkit-scrollbar-thumb {
             background: #888;
         }
-
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
 
         .wrapper {
             width: 100%;
@@ -106,37 +127,23 @@
         .container {
             width: 100%;
             height: 100vh;
-
             display: flex;
         }
-
-
-        /* =====================================================
-           LEFT SIDEBAR
-        ===================================================== */
 
         .left-content {
             width: 330px;
             min-width: 330px;
             height: 100vh;
-
-            background: #ffffff;
-
-            border-right: 1px solid #eeeeee;
-
-            padding: 35px 40px;
-
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+            padding: 30px 35px;
             display: flex;
             flex-direction: column;
-
+            justify-content: space-between;
             position: relative;
             z-index: 10;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
-
-
-        /* =====================================================
-           LOGO
-        ===================================================== */
 
         .logo {
             display: flex;
@@ -144,42 +151,27 @@
         }
 
         .logo a {
-            width: 165px;
-            height: 104px;
-
-            background: #000000;
-            color: #ffffff;
-
+            width: 175px;
+            height: 80px;
             display: flex;
-            flex-direction: column;
-
             justify-content: center;
             align-items: center;
-
-            font-family: "Roboto", Arial, sans-serif;
-
-            font-size: 20px;
-            font-weight: 400;
-
-            text-transform: uppercase;
-
-            letter-spacing: 5px;
-
-            line-height: 35px;
+            padding: 5px;
         }
 
-        .logo a span {
-            display: block;
+        .logo a img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
-
-        /* =====================================================
-           NAVIGATION
-        ===================================================== */
+        [data-theme="dark"] .logo a img {
+            filter: invert(1) brightness(2);
+        }
 
         .nav {
-            flex: 1;
-
+            margin: 20px 0;
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -192,49 +184,44 @@
         .nav ul li {
             display: flex;
             justify-content: flex-end;
+            margin-bottom: 4px;
         }
 
         .nav ul li a {
             position: relative;
-
-            padding: 8px 0;
-
-            color: rgba(0, 0, 0, 0.40);
-
+            padding: 7px 0;
+            color: var(--text-muted);
             font-size: 13px;
             font-weight: 500;
-
             text-transform: uppercase;
-
             letter-spacing: 1px;
-
             transition: 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .nav ul li a:hover {
-            color: #000000;
-            transform: translateX(-5px);
+        .nav ul li a i {
+            font-size: 14px;
+            width: 16px;
+            text-align: center;
         }
 
+        .nav ul li a:hover,
         .nav ul li a.active {
-            color: #000000;
+            color: var(--text-main);
             transform: translateX(-5px);
         }
 
         .nav ul li a::after {
             content: "";
-
             position: absolute;
-
             left: 0;
             right: 0;
             bottom: 3px;
-
             width: 0;
-            height: 1px;
-
-            background: #000000;
-
+            height: 1.5px;
+            background: var(--primary);
             transition: 0.3s ease;
         }
 
@@ -243,13 +230,46 @@
             width: 100%;
         }
 
-
-        /* =====================================================
-           SIDEBAR FOOTER
-        ===================================================== */
+        .sidebar-badge {
+            background: var(--badge-bg);
+            color: #ffffff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
 
         .left-footer {
             text-align: right;
+        }
+
+        .sidebar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .theme-btn, .auth-btn {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.2s ease;
+        }
+
+        .theme-btn:hover, .auth-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .social-icons ul {
@@ -259,158 +279,101 @@
 
         .social-icons ul li a {
             padding: 5px 8px;
-
             font-size: 16px;
-
             display: block;
-
+            color: var(--text-muted);
             transition: 0.3s ease;
         }
 
         .social-icons ul li a:hover {
-            color: #000000;
+            color: var(--text-main);
             transform: translateY(-4px) scale(1.15);
         }
 
         .foot-contact {
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .foot-contact li {
             margin: 4px 0;
             font-size: 11px;
+            color: var(--text-muted);
         }
 
         .copy-rights {
             font-size: 10px;
+            color: var(--text-light);
         }
-
-
-        /* =====================================================
-           MAIN CONTENT AREA
-        ===================================================== */
 
         .main-content {
             flex: 1;
-
             width: calc(100% - 330px);
             height: 100vh;
-
-            background: #ffffff;
-
+            background: var(--bg-body);
             overflow: hidden;
-
             position: relative;
+            transition: background 0.3s ease;
         }
-
-
-        /* =====================================================
-           ALL SECTIONS
-        ===================================================== */
 
         .cv-section {
             width: 100%;
             height: 100%;
-
             padding: 45px 60px;
-
             display: none;
-
-            /*
-               Main magic:
-               content ko vertical + horizontal center
-               karta hai.
-            */
-
             align-items: center;
             justify-content: center;
-
             flex-direction: column;
-
             overflow-y: auto;
-
             opacity: 0;
         }
 
         .cv-section.active-section {
             display: flex;
-
-            animation: pageShow 0.55s ease forwards;
+            animation: pageShow 0.4s ease forwards;
         }
 
-
-        /* =====================================================
-           PAGE ANIMATION
-        ===================================================== */
-
         @keyframes pageShow {
-
             0% {
                 opacity: 0;
-                transform: translateY(25px);
+                transform: translateY(15px);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(0);
             }
-
         }
-
-
-        /* =====================================================
-           SECTION TITLE
-        ===================================================== */
 
         .sec-title {
             width: 100%;
             max-width: 1050px;
-
-            margin-bottom: 45px;
+            margin-bottom: 40px;
         }
 
         .pg-sub-title {
             display: block;
-
-            margin-bottom: 9px;
-
-            color: #999999;
-
+            margin-bottom: 8px;
+            color: var(--text-light);
             font-size: 10px;
-
             font-weight: 500;
-
             text-transform: uppercase;
-
             letter-spacing: 5px;
         }
 
         .pg-title {
-            color: #000000;
-
+            color: var(--text-main);
             font-size: 20px;
-
             font-weight: 500;
-
             text-transform: uppercase;
-
             letter-spacing: 5px;
         }
 
-
-        /* =====================================================
-           HOME
-        ===================================================== */
-
+        /* HOME */
         .home-wrapper {
             width: 100%;
             max-width: 1050px;
-
             display: flex;
-
             align-items: center;
             justify-content: center;
-
             gap: 65px;
         }
 
@@ -420,9 +383,10 @@
 
         .user-img img {
             width: 100%;
-            max-width: 470px;
-
-            border-radius: 4px;
+            max-width: 440px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .user-profile {
@@ -430,82 +394,52 @@
         }
 
         .sm-text {
-            color: #222222;
-
+            color: var(--text-main);
             font-family: "Roboto", Arial, sans-serif;
-
             font-size: 14px;
-
             text-transform: uppercase;
-
             letter-spacing: 2px;
         }
 
         .name {
             margin: 15px 0;
-
-            color: #222222;
-
+            color: var(--text-main);
             font-family: "Roboto", Arial, sans-serif;
-
-            font-size: 40px;
-
+            font-size: 38px;
             font-weight: 600;
-
             line-height: 1.2;
-
             text-transform: uppercase;
         }
 
         .role {
-            margin-bottom: 20px;
-
-            color: #222222;
-
+            margin-bottom: 18px;
+            color: var(--text-main);
             font-family: "Roboto", Arial, sans-serif;
-
             font-size: 18px;
-
             font-weight: 500;
-
             text-transform: uppercase;
         }
 
         .text {
             max-width: 500px;
-
             font-size: 14px;
-
-            color: #888888;
+            color: var(--text-light);
         }
 
-
-        /* =====================================================
-           PERSONAL DETAILS
-        ===================================================== */
-
         .pr-list {
-            margin: 25px 0;
+            margin: 22px 0;
         }
 
         .pr-list li {
-            margin-bottom: 11px;
-
-            color: #888888;
-
+            margin-bottom: 10px;
+            color: var(--text-light);
             font-size: 13px;
         }
 
         .pr-list li i {
             width: 23px;
-
-            color: #333333;
+            color: var(--text-main);
         }
-
-
-        /* =====================================================
-           PROFILE SOCIAL
-        ===================================================== */
 
         .social-icons-head ul {
             display: flex;
@@ -513,13 +447,9 @@
 
         .social-icons-head ul li a {
             padding: 5px 10px;
-
             font-size: 21px;
-
-            color: #777777;
-
+            color: var(--text-light);
             display: flex;
-
             transition: 0.3s ease;
         }
 
@@ -528,18 +458,11 @@
         }
 
         .social-icons-head ul li a:hover {
-            color: #000000;
-
-            transform:
-                translateY(-4px)
-                scale(1.15);
+            color: var(--text-main);
+            transform: translateY(-4px) scale(1.15);
         }
 
-
-        /* =====================================================
-           ABOUT
-        ===================================================== */
-
+        /* ABOUT */
         .about-content {
             width: 100%;
             max-width: 850px;
@@ -547,43 +470,32 @@
 
         .about-content h2 {
             margin-bottom: 22px;
-
             font-size: 28px;
         }
 
         .about-content h3 {
             margin: 30px 0 20px;
-
             font-size: 21px;
         }
 
         .about-content p {
-            color: #888888;
-
+            color: var(--text-light);
             font-size: 14px;
         }
 
         .strength-list li {
             padding: 12px 0;
-
-            border-bottom: 1px solid #eeeeee;
-
-            color: #777777;
-
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 14px;
         }
 
         .strength-list li i {
             width: 25px;
-
-            color: #000000;
+            color: var(--text-main);
         }
 
-
-        /* =====================================================
-           WORK PROFILE
-        ===================================================== */
-
+        /* WORK */
         .work-content {
             width: 100%;
             max-width: 850px;
@@ -591,13 +503,11 @@
 
         .work-content h2 {
             margin-bottom: 15px;
-
             font-size: 28px;
         }
 
         .work-content h3 {
             margin: 30px 0 25px;
-
             font-size: 21px;
         }
 
@@ -606,119 +516,81 @@
         }
 
         .skill {
-            margin-bottom: 22px;
+            margin-bottom: 16px;
         }
 
         .skill-name {
             display: flex;
-
             justify-content: space-between;
-
-            margin-bottom: 7px;
-
-            color: #555555;
-
+            margin-bottom: 6px;
+            color: var(--text-main);
             font-size: 13px;
+            font-weight: 600;
         }
 
         .skill-bar {
             width: 100%;
-            height: 5px;
-
-            background: #eeeeee;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .skill-progress {
             height: 100%;
-
-            background: #000000;
-
+            background: var(--primary);
             width: 0;
-
             transition: width 1s ease;
         }
 
-        .active-section .html {
-            width: 90%;
-        }
+        .active-section .html { width: 90%; background-color: #2ed573; }
+        .active-section .css { width: 85%; background-color: #8854d0; }
+        .active-section .javascript { width: 70%; background-color: #00b4d8; }
+        .active-section .photoshop { width: 80%; background-color: #0066cc; }
+        .active-section .wordpress { width: 80%; background-color: #00a8ff; }
+        .active-section .tally { width: 65%; background-color: #2c7a9c; }
 
-        .active-section .css {
-            width: 85%;
-        }
-
-        .active-section .javascript {
-            width: 70%;
-        }
-
-        .active-section .photoshop {
-            width: 80%;
-        }
-
-        .active-section .wordpress {
-            width: 85%;
-        }
-
-
-        /* =====================================================
-           PORTFOLIO
-        ===================================================== */
-
+        /* PORTFOLIO */
         .portfolio-grid {
             width: 100%;
             max-width: 900px;
-
             display: grid;
-
             grid-template-columns: repeat(2, 1fr);
-
             gap: 22px;
         }
 
         .project {
             padding: 28px;
-
-            border: 1px solid #eeeeee;
-
-            background: #ffffff;
-
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 8px;
             transition: 0.3s ease;
         }
 
         .project:hover {
-            transform: translateY(-6px);
-
-            box-shadow:
-                0 10px 25px
-                rgba(0, 0, 0, 0.07);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
         }
 
         .project i {
             margin-bottom: 15px;
-
             font-size: 28px;
-
-            color: #222222;
+            color: var(--primary);
         }
 
         .project h3 {
             margin-bottom: 10px;
-
             font-size: 19px;
         }
 
         .project p {
             margin-bottom: 0;
-
-            color: #888888;
-
+            color: var(--text-light);
             font-size: 13px;
         }
 
-
-        /* =====================================================
-           EDUCATION
-        ===================================================== */
-
+        /* EDUCATION */
         .timeline {
             width: 100%;
             max-width: 850px;
@@ -726,1203 +598,1222 @@
 
         .timeline-item {
             margin-bottom: 28px;
-
-            padding:
-                0 0 25px 25px;
-
-            border-left: 2px solid #000000;
+            padding: 0 0 25px 25px;
+            border-left: 2px solid var(--primary);
         }
 
         .timeline-item span {
-            color: #999999;
-
+            color: var(--text-light);
             font-size: 9px;
-
             letter-spacing: 3px;
         }
 
         .timeline-item h3 {
             margin: 8px 0;
-
             font-size: 21px;
         }
 
         .timeline-item p {
-            color: #888888;
-
+            color: var(--text-light);
             font-size: 14px;
         }
 
-
-        /* =====================================================
-           CONTACT
-        ===================================================== */
-
+        /* CONTACT FORM */
         .contact-content {
             width: 100%;
             max-width: 750px;
         }
 
         .contact-content h2 {
-            margin-bottom: 18px;
-
+            margin-bottom: 12px;
             font-size: 28px;
         }
 
         .contact-content > p {
-            color: #888888;
-
+            color: var(--text-light);
             font-size: 14px;
+            margin-bottom: 20px;
         }
 
-        .contact-item {
-            display: flex;
+        .form-group {
+            margin-bottom: 14px;
+        }
 
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-main);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: var(--primary-inv);
+            border: none;
+            padding: 11px 24px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-            gap: 20px;
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
 
-            padding: 18px 0;
+        .alert-success {
+            display: none;
+            padding: 10px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #10b981;
+            color: #10b981;
+            font-size: 13px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
 
-            border-bottom: 1px solid #eeeeee;
+        /* ADMIN & KEEP NOTES */
+        .admin-content {
+            width: 100%;
+            max-width: 850px;
+        }
 
+        .admin-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .inquiry-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .inquiry-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .inquiry-card-header h4 {
+            font-size: 15px;
+            color: var(--text-main);
+        }
+
+        .inquiry-meta {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .inquiry-msg {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .inquiry-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-action-sm {
+            padding: 7px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s ease;
+        }
+
+        .btn-action-sm:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-del {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-del:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+        }
+
+        /* KEEP NOTES STYLES */
+        .notes-form-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            width: 100%;
+        }
+
+        .note-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .note-item h4 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            padding-right: 25px;
+        }
+
+        .note-item p {
+            font-size: 13px;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .note-item img {
+            border-radius: 6px;
+            margin-top: 8px;
+            max-height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .note-file-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--primary);
+            margin-top: 8px;
+            text-decoration: underline;
+        }
+
+        .btn-del-note {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
             font-size: 14px;
         }
 
-        .contact-item i {
-            width: 25px;
+        /* MODAL */
+        #loginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.65);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
 
-            color: #222222;
+        .modal-box {
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
+        .modal-box h3 {
             font-size: 18px;
+            margin-bottom: 8px;
         }
 
-        .contact-item a:hover {
-            color: #000000;
+        .modal-box p {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 15px;
         }
-
-
-        /* =====================================================
-           TABLET
-        ===================================================== */
 
         @media (max-width: 1100px) {
-
             .left-content {
                 width: 270px;
                 min-width: 270px;
-
-                padding: 30px;
+                padding: 25px;
             }
-
             .main-content {
                 width: calc(100% - 270px);
             }
-
             .cv-section {
                 padding: 40px;
             }
-
             .home-wrapper {
                 gap: 35px;
             }
-
             .name {
-                font-size: 34px;
+                font-size: 32px;
             }
-
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
         @media (max-width: 800px) {
-
             body {
                 overflow: auto;
             }
-
             .container {
                 height: auto;
-
                 flex-direction: column;
             }
-
             .left-content {
                 width: 100%;
                 min-width: 100%;
-
                 height: auto;
-
                 padding: 20px;
-
                 border-right: none;
-                border-bottom: 1px solid #eeeeee;
+                border-bottom: 1px solid var(--sidebar-border);
             }
-
             .logo {
                 justify-content: center;
             }
-
             .nav {
-                margin: 25px 0;
-
+                margin: 20px 0;
                 display: block;
             }
-
             .nav ul {
                 display: flex;
-
                 justify-content: center;
-
                 flex-wrap: wrap;
-
-                gap: 5px 18px;
+                gap: 5px 15px;
             }
-
-            .nav ul li {
-                display: block;
-            }
-
-            .nav ul li a {
-                font-size: 10px;
-            }
-
-            .left-footer {
-                text-align: center;
-            }
-
-            .social-icons ul {
-                justify-content: center;
-            }
-
             .main-content {
                 width: 100%;
-
                 height: auto;
-
                 min-height: 80vh;
-
                 overflow: visible;
             }
-
-            /*
-               Mobile par content ko top se start
-               karenge.
-            */
-
             .cv-section {
                 width: 100%;
-
                 height: auto;
-
                 min-height: 80vh;
-
-                padding: 40px 22px;
-
+                padding: 40px 20px;
                 align-items: flex-start;
                 justify-content: flex-start;
-
-                overflow: visible;
             }
-
             .home-wrapper {
                 flex-direction: column;
-
                 align-items: flex-start;
-
-                gap: 35px;
+                gap: 30px;
             }
-
             .user-img {
                 width: 100%;
             }
-
             .user-img img {
-                max-width: 450px;
+                max-width: 100%;
             }
-
-            .portfolio-grid {
+            .portfolio-grid, .notes-grid {
                 grid-template-columns: 1fr;
             }
-
         }
-
-
-        /* =====================================================
-           SMALL MOBILE
-        ===================================================== */
-
-        @media (max-width: 500px) {
-
-            .logo a {
-                width: 150px;
-                height: 95px;
-            }
-
-            .cv-section {
-                padding: 30px 18px;
-            }
-
-            .sec-title {
-                margin-bottom: 35px;
-            }
-
-            .pg-title {
-                font-size: 17px;
-                letter-spacing: 3px;
-            }
-
-            .name {
-                font-size: 28px;
-            }
-
-            .role {
-                font-size: 15px;
-            }
-
-        }
-
     </style>
-
 </head>
-
 
 <body>
 
-
 <div class="wrapper">
-
     <div class="container">
 
-
-        <!-- =================================================
-             LEFT SIDE
-        ================================================== -->
-
+        <!-- LEFT SIDEBAR -->
         <aside class="left-content">
-
-
-            <!-- LOGO -->
-
             <div class="logo">
-
                 <a href="#Home">
-
-                    <span>MY</span>
-                    <span>RESUME</span>
-
+                    <img 
+                        src="https://lh3.googleusercontent.com/d/1k_EYNpNOfQK0C92wDTDGeyLy69zVL5LI" 
+                        alt="Ankit Pranami Logo" 
+                        referrerpolicy="no-referrer"
+                    >
                 </a>
-
             </div>
 
-
-            <!-- MENU -->
-
+            <!-- BUTTONS WITH ICONS -->
             <nav class="nav">
-
                 <ul>
-
-                    <li>
-                        <a href="#Home" class="active">
-                            Home
+                    <li><a href="#Home" class="active"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#About"><i class="fa fa-user"></i> About</a></li>
+                    <li><a href="#Work"><i class="fa fa-briefcase"></i> Work Profile</a></li>
+                    <li><a href="#Portfolio"><i class="fa fa-th-large"></i> Portfolio</a></li>
+                    <li><a href="#Education"><i class="fa fa-graduation-cap"></i> Education</a></li>
+                    <li><a href="#Contact"><i class="fa fa-envelope"></i> Contact</a></li>
+                    
+                    <!-- Admin Tabs (Visible after Login) -->
+                    <li id="adminNavTab" style="display: none;">
+                        <a href="#Admin" style="color: var(--primary);">
+                            <i class="fa fa-inbox"></i> Inbox <span class="sidebar-badge" id="inboxBadge">0</span>
                         </a>
                     </li>
-
-                    <li>
-                        <a href="#About">
-                            About
+                    <li id="notesNavTab" style="display: none;">
+                        <a href="#Notes" style="color: var(--primary);">
+                            <i class="fa fa-sticky-note"></i> Keep Notes <span class="sidebar-badge" id="notesBadge">0</span>
                         </a>
                     </li>
-
-                    <li>
-                        <a href="#Work">
-                            Work Profile
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#Portfolio">
-                            Portfolio
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#Education">
-                            Education
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#Contact">
-                            Contact
-                        </a>
-                    </li>
-
                 </ul>
-
             </nav>
 
-
-            <!-- FOOTER -->
-
             <div class="left-footer">
-
+                <div class="sidebar-actions">
+                    <button class="theme-btn" id="themeToggle">
+                        <span id="themeLabel">Dark Theme</span>
+                        <i class="fa fa-moon-o" id="themeIcon"></i>
+                    </button>
+                    <button class="auth-btn" id="authBtn" onclick="handleAuthClick()">
+                        <span id="authLabel">Admin Access</span>
+                        <i class="fa fa-lock" id="authIcon"></i>
+                    </button>
+                </div>
 
                 <div class="social-icons">
-
                     <ul>
-
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-linkedin-square"></i>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-facebook"></i>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-twitter"></i>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </li>
-
+                        <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                     </ul>
-
                 </div>
-
 
                 <div class="foot-contact">
-
                     <ul>
-
-                        <li>
-                            ankitpranami001@gmail.com
-                        </li>
-
-                        <li>
-                            +9187**9907**
-                        </li>
-
+                        <li>ankitpranami001@gmail.com</li>
+                        <li>+9187**9907**</li>
                     </ul>
-
                 </div>
-
 
                 <div class="copy-rights">
-
                     Copyright © 2026 All rights reserved
-
                 </div>
-
             </div>
-
         </aside>
 
-
-
-        <!-- =================================================
-             RIGHT MAIN CONTENT
-        ================================================== -->
-
+        <!-- MAIN CONTENT -->
         <main class="main-content">
 
-
-            <!-- =================================================
-                 HOME
-            ================================================== -->
-
-            <section
-                id="Home"
-                class="cv-section active-section"
-            >
-
+            <!-- 1. HOME -->
+            <section id="Home" class="cv-section active-section">
                 <div class="sec-title">
-
-                    <div class="pg-sub-title">
-                        HOME
-                    </div>
-
-                    <div class="pg-title">
-                        MY PROFILE
-                    </div>
-
+                    <div class="pg-sub-title">HOME</div>
+                    <div class="pg-title">MY PROFILE</div>
                 </div>
-
 
                 <div class="home-wrapper">
-
-
                     <div class="user-img">
-
                         <img
-                            src="https://colorlib.com/preview/theme/meetme/img/personal.jpg"
+                            src="https://lh3.googleusercontent.com/d/1uB2Y1hpD11uwL3v9HO0trw8r0PpoKCsb"
                             alt="Ankit Kumar"
+                            referrerpolicy="no-referrer"
                         >
-
                     </div>
-
 
                     <div class="user-profile">
-
-                        <div class="sm-text">
-                            HELLO EVERYBODY, I AM
-                        </div>
-
-
-                        <div class="name">
-                            ANKIT KUMAR
-                        </div>
-
-
-                        <div class="role">
-                            FRONTEND DEVELOPER
-                        </div>
-
-
+                        <div class="sm-text">HELLO EVERYBODY, I AM</div>
+                        <div class="name">ANKIT KUMAR</div>
+                        <div class="role">FRONTEND DEVELOPER</div>
                         <div class="text">
-
-                            I am a passionate Frontend Developer
-                            who creates modern, responsive and
-                            user-friendly websites.
-
-                            I work with HTML, CSS, JavaScript,
-                            Photoshop and WordPress.
-
+                            I am a passionate Frontend Developer who creates modern, responsive and user-friendly websites. I work with HTML, CSS, JavaScript, Photoshop and WordPress.
                         </div>
-
 
                         <div class="pr-list">
-
                             <ul>
-
-                                <li>
-                                    <i class="fa fa-phone"></i>
-                                    +9187**9907**
-                                </li>
-
-                                <li>
-                                    <i class="fa fa-envelope"></i>
-                                    arcankitpranami@gmail.com
-                                </li>
-
-                                <li>
-                                    <i class="fa fa-map-marker"></i>
-                                    India
-                                </li>
-
+                                <li><i class="fa fa-phone"></i> +9187**9907**</li>
+                                <li><i class="fa fa-envelope"></i> arcankitpranami@gmail.com</li>
+                                <li><i class="fa fa-map-marker"></i> India</li>
                             </ul>
-
                         </div>
-
 
                         <div class="social-icons-head">
-
                             <ul>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-linkedin-square"></i>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-facebook"></i>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-twitter"></i>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-instagram"></i>
-                                    </a>
-                                </li>
-
+                                <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                             </ul>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
 
-
-
-            <!-- =================================================
-                 ABOUT
-            ================================================== -->
-
-            <section
-                id="About"
-                class="cv-section"
-            >
-
+            <!-- 2. ABOUT -->
+            <section id="About" class="cv-section">
                 <div class="sec-title">
-
-                    <div class="pg-sub-title">
-                        ABOUT
-                    </div>
-
-                    <div class="pg-title">
-                        ABOUT ME
-                    </div>
-
+                    <div class="pg-sub-title">ABOUT</div>
+                    <div class="pg-title">ABOUT ME</div>
                 </div>
-
 
                 <div class="about-content">
+                    <h2>Hello, I'm Ankit Kumar</h2>
+                    <p>I am a passionate Frontend Developer interested in creating modern, clean and responsive websites.</p>
+                    <p>I create attractive user interfaces using HTML, CSS and JavaScript.</p>
+                    <p>I also work with Photoshop, WordPress and Elementor for website design and development.</p>
 
-                    <h2>
-                        Hello, I'm Ankit Kumar
-                    </h2>
-
-
-                    <p>
-                        I am a passionate Frontend Developer
-                        interested in creating modern, clean
-                        and responsive websites.
-                    </p>
-
-
-                    <p>
-                        I create attractive user interfaces
-                        using HTML, CSS and JavaScript.
-                    </p>
-
-
-                    <p>
-                        I also work with Photoshop, WordPress
-                        and Elementor for website design and
-                        development.
-                    </p>
-
-
-                    <h3>
-                        My Strengths
-                    </h3>
-
-
+                    <h3>My Strengths</h3>
                     <ul class="strength-list">
-
-                        <li>
-                            <i class="fa fa-check"></i>
-                            Responsive Web Design
-                        </li>
-
-                        <li>
-                            <i class="fa fa-check"></i>
-                            HTML & CSS
-                        </li>
-
-                        <li>
-                            <i class="fa fa-check"></i>
-                            JavaScript
-                        </li>
-
-                        <li>
-                            <i class="fa fa-check"></i>
-                            Photoshop
-                        </li>
-
-                        <li>
-                            <i class="fa fa-check"></i>
-                            WordPress & Elementor
-                        </li>
-
+                        <li><i class="fa fa-check"></i> Responsive Web Design</li>
+                        <li><i class="fa fa-check"></i> HTML & CSS</li>
+                        <li><i class="fa fa-check"></i> JavaScript</li>
+                        <li><i class="fa fa-check"></i> Photoshop</li>
+                        <li><i class="fa fa-check"></i> WordPress & Elementor</li>
                     </ul>
-
                 </div>
-
             </section>
 
-
-
-            <!-- =================================================
-                 WORK PROFILE
-            ================================================== -->
-
-            <section
-                id="Work"
-                class="cv-section"
-            >
-
+            <!-- 3. WORK PROFILE -->
+            <section id="Work" class="cv-section">
                 <div class="sec-title">
-
-                    <div class="pg-sub-title">
-                        WORK PROFILE
-                    </div>
-
-                    <div class="pg-title">
-                        MY SKILLS
-                    </div>
-
+                    <div class="pg-sub-title">WORK PROFILE</div>
+                    <div class="pg-title">MY SKILLS</div>
                 </div>
 
-
                 <div class="work-content">
+                    <h2>Frontend Developer</h2>
+                    <p>I create responsive websites, landing pages and modern user interfaces.</p>
 
-                    <h2>
-                        Frontend Developer
-                    </h2>
-
-
-                    <p>
-                        I create responsive websites,
-                        landing pages and modern user
-                        interfaces.
-                    </p>
-
-
-                    <h3>
-                        Technical Skills
-                    </h3>
-
-
+                    <h3>Technical Skills</h3>
                     <div class="skills">
-
+                        <div class="skill">
+                            <div class="skill-name">
+                                <span>Wordpress</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress wordpress"></div>
+                            </div>
+                        </div>
 
                         <div class="skill">
-
                             <div class="skill-name">
                                 <span>HTML</span>
                                 <span>90%</span>
                             </div>
-
                             <div class="skill-bar">
                                 <div class="skill-progress html"></div>
                             </div>
-
                         </div>
 
-
                         <div class="skill">
-
                             <div class="skill-name">
                                 <span>CSS</span>
                                 <span>85%</span>
                             </div>
-
                             <div class="skill-bar">
                                 <div class="skill-progress css"></div>
                             </div>
-
                         </div>
 
-
                         <div class="skill">
-
                             <div class="skill-name">
                                 <span>JavaScript</span>
                                 <span>70%</span>
                             </div>
-
                             <div class="skill-bar">
                                 <div class="skill-progress javascript"></div>
                             </div>
-
                         </div>
 
-
                         <div class="skill">
-
                             <div class="skill-name">
                                 <span>Photoshop</span>
                                 <span>80%</span>
                             </div>
-
                             <div class="skill-bar">
                                 <div class="skill-progress photoshop"></div>
                             </div>
-
                         </div>
-
 
                         <div class="skill">
-
                             <div class="skill-name">
-                                <span>WordPress</span>
-                                <span>85%</span>
+                                <span>Tally erp9</span>
+                                <span>65%</span>
                             </div>
-
                             <div class="skill-bar">
-                                <div class="skill-progress wordpress"></div>
+                                <div class="skill-progress tally"></div>
                             </div>
-
                         </div>
-
-
                     </div>
-
                 </div>
-
             </section>
 
-
-
-            <!-- =================================================
-                 PORTFOLIO
-            ================================================== -->
-
-            <section
-                id="Portfolio"
-                class="cv-section"
-            >
-
+            <!-- 4. PORTFOLIO -->
+            <section id="Portfolio" class="cv-section">
                 <div class="sec-title">
-
-                    <div class="pg-sub-title">
-                        PORTFOLIO
-                    </div>
-
-                    <div class="pg-title">
-                        MY PROJECTS
-                    </div>
-
+                    <div class="pg-sub-title">PORTFOLIO</div>
+                    <div class="pg-title">MY PROJECTS</div>
                 </div>
-
 
                 <div class="portfolio-grid">
-
-
                     <div class="project">
-
                         <i class="fa fa-laptop"></i>
-
-                        <h3>
-                            Portfolio Website
-                        </h3>
-
-                        <p>
-                            A responsive personal portfolio
-                            website created using HTML, CSS
-                            and JavaScript.
-                        </p>
-
+                        <h3>Portfolio Website</h3>
+                        <p>A responsive personal portfolio website created using HTML, CSS and JavaScript.</p>
                     </div>
-
-
                     <div class="project">
-
                         <i class="fa fa-shopping-cart"></i>
-
-                        <h3>
-                            E-Commerce Website
-                        </h3>
-
-                        <p>
-                            A modern e-commerce website with
-                            responsive design and user-friendly
-                            interface.
-                        </p>
-
+                        <h3>E-Commerce Website</h3>
+                        <p>A modern e-commerce website with responsive design and user-friendly interface.</p>
                     </div>
-
-
                     <div class="project">
-
                         <i class="fa fa-wordpress"></i>
-
-                        <h3>
-                            WordPress Website
-                        </h3>
-
-                        <p>
-                            WordPress websites designed and
-                            customized using Elementor.
-                        </p>
-
+                        <h3>WordPress Website</h3>
+                        <p>WordPress websites designed and customized using Elementor.</p>
                     </div>
-
-
                     <div class="project">
-
                         <i class="fa fa-code"></i>
-
-                        <h3>
-                            Frontend Projects
-                        </h3>
-
-                        <p>
-                            Various HTML, CSS and JavaScript
-                            projects and landing pages.
-                        </p>
-
+                        <h3>Frontend Projects</h3>
+                        <p>Various HTML, CSS and JavaScript projects and landing pages.</p>
                     </div>
-
-
                 </div>
-
             </section>
 
-
-
-            <!-- =================================================
-                 EDUCATION
-            ================================================== -->
-
-            <section
-                id="Education"
-                class="cv-section"
-            >
-
+            <!-- 5. EDUCATION -->
+            <section id="Education" class="cv-section">
                 <div class="sec-title">
-
-                    <div class="pg-sub-title">
-                        EDUCATION
-                    </div>
-
-                    <div class="pg-title">
-                        MY EDUCATION
-                    </div>
-
+                    <div class="pg-sub-title">EDUCATION</div>
+                    <div class="pg-title">MY EDUCATION</div>
                 </div>
-
 
                 <div class="timeline">
-
-
                     <div class="timeline-item">
-
-                        <span>
-                            EDUCATION
-                        </span>
-
-                        <h3>
-                            Academic Qualification
-                        </h3>
-
-                        <p>
-                            Add your qualification, school or
-                            college name and passing year here.
-                        </p>
-
+                        <span>EDUCATION</span>
+                        <h3>Academic Qualification</h3>
+                        <p>Add your qualification, school or college name and passing year here.</p>
                     </div>
-
-
                     <div class="timeline-item">
-
-                        <span>
-                            PROFESSIONAL
-                        </span>
-
-                        <h3>
-                            Web Development
-                        </h3>
-
-                        <p>
-                            Learning and working with HTML,
-                            CSS, JavaScript, WordPress and
-                            modern web technologies.
-                        </p>
-
+                        <span>PROFESSIONAL</span>
+                        <h3>Web Development</h3>
+                        <p>Learning and working with HTML, CSS, JavaScript, WordPress and modern web technologies.</p>
                     </div>
-
-
                     <div class="timeline-item">
-
-                        <span>
-                            CURRENT LEARNING
-                        </span>
-
-                        <h3>
-                            Frontend Development
-                        </h3>
-
-                        <p>
-                            Continuously improving frontend
-                            development and responsive design
-                            skills.
-                        </p>
-
+                        <span>CURRENT LEARNING</span>
+                        <h3>Frontend Development</h3>
+                        <p>Continuously improving frontend development and responsive design skills.</p>
                     </div>
-
-
                 </div>
-
             </section>
 
-
-
-            <!-- =================================================
-                 CONTACT
-            ================================================== -->
-
-            <section
-                id="Contact"
-                class="cv-section"
-            >
-
+            <!-- 6. CONTACT FORM -->
+            <section id="Contact" class="cv-section">
                 <div class="sec-title">
-
-                    <div class="pg-sub-title">
-                        CONTACT
-                    </div>
-
-                    <div class="pg-title">
-                        CONTACT ME
-                    </div>
-
+                    <div class="pg-sub-title">CONTACT</div>
+                    <div class="pg-title">CONTACT ME</div>
                 </div>
-
 
                 <div class="contact-content">
+                    <h2>Let's Work Together</h2>
+                    <p>If you have a project or website idea, feel free to submit the form below.</p>
 
-                    <h2>
-                        Let's Work Together
-                    </h2>
-
-
-                    <p>
-                        If you have a project or website idea,
-                        feel free to contact me.
-                    </p>
-
-
-                    <div class="contact-item">
-
-                        <i class="fa fa-envelope"></i>
-
-                        <a href="mailto:ankitpranami001@gmail.com">
-                            arcankitpranami@gmail.com
-                        </a>
-
+                    <div id="contactSuccessAlert" class="alert-success">
+                        <i class="fa fa-check-circle"></i> Thank you! Message sent and saved to Admin Panel.
                     </div>
 
-
-                    <div class="contact-item">
-
-                        <i class="fa fa-phone"></i>
-
-                        <span>
-                            +9187**9907**
-                        </span>
-
-                    </div>
-
-
-                    <div class="contact-item">
-
-                        <i class="fa fa-map-marker"></i>
-
-                        <span>
-                            India
-                        </span>
-
-                    </div>
-
-
+                    <form id="cvContactForm">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="formName" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="formEmail" placeholder="yourname@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number (Optional)</label>
+                            <input type="tel" id="formPhone" placeholder="+91 9876543210">
+                        </div>
+                        <div class="form-group">
+                            <label>Message *</label>
+                            <textarea id="formMessage" rows="4" placeholder="Your project requirements..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fa fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
                 </div>
-
             </section>
 
+            <!-- 7. ADMIN INBOX -->
+            <section id="Admin" class="cv-section">
+                <div class="sec-title">
+                    <div class="pg-sub-title">CONTROL CENTER</div>
+                    <div class="pg-title">CLIENT INBOX</div>
+                </div>
+
+                <div class="admin-content">
+                    <div class="admin-top-bar">
+                        <h3><i class="fa fa-inbox"></i> Responses (<span id="inquiryCount">0</span>)</h3>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-action-sm" onclick="exportToCSV()">
+                                <i class="fa fa-file-excel-o"></i> Export CSV
+                            </button>
+                            <button class="btn-action-sm btn-del" onclick="clearAllMessages()">
+                                <i class="fa fa-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="inboxListContainer"></div>
+                </div>
+            </section>
+
+            <!-- 8. KEEP NOTES SECTION -->
+            <section id="Notes" class="cv-section">
+                <div class="sec-title">
+                    <div class="pg-sub-title">ADMIN TOOLS</div>
+                    <div class="pg-title">KEEP NOTES & PAGES</div>
+                </div>
+
+                <div class="admin-content">
+                    <!-- Note Form -->
+                    <div class="notes-form-card">
+                        <h4 style="margin-bottom: 12px; color: var(--text-main);"><i class="fa fa-pencil-square-o"></i> Create New Note / Page</h4>
+                        <div class="form-group">
+                            <input type="text" id="noteTitle" placeholder="Page / Note Title...">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="noteContent" rows="4" placeholder="Type your notes, links, or required details here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 11px;"><i class="fa fa-paperclip"></i> Attach Image or File (Photo/PDF/Doc):</label>
+                            <input type="file" id="noteFile" accept="image/*,.pdf,.doc,.docx,.txt" style="padding: 6px;">
+                        </div>
+                        <button class="btn-submit" onclick="saveAdminNote()">
+                            <i class="fa fa-plus-circle"></i> Save Note
+                        </button>
+                    </div>
+
+                    <!-- Notes Display Grid -->
+                    <div class="admin-top-bar">
+                        <h3><i class="fa fa-sticky-note-o"></i> Saved Notes (<span id="notesCountDisplay">0</span>)</h3>
+                    </div>
+                    <div class="notes-grid" id="notesListContainer"></div>
+                </div>
+            </section>
 
         </main>
-
     </div>
-
 </div>
 
+<!-- AUTH & RESET MODAL -->
+<div id="loginModal">
+    <!-- Login View -->
+    <div class="modal-box" id="loginBox">
+        <h3>Admin Access</h3>
+        <p>Enter secure password to view responses & notes</p>
+        <div class="form-group">
+            <input type="password" id="adminPassInput" placeholder="Password" style="text-align: center;">
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-submit" onclick="attemptLogin()" style="flex: 1;"><i class="fa fa-sign-in"></i> Login</button>
+            <button class="btn-action-sm" onclick="closeLoginModal()" style="flex: 1; justify-content: center;"><i class="fa fa-times"></i> Cancel</button>
+        </div>
+        <div style="margin-top: 12px;">
+            <a href="javascript:void(0)" onclick="showForgotView()" style="font-size: 11px; color: var(--primary); text-decoration: underline;">
+                <i class="fa fa-key"></i> Forgot Password?
+            </a>
+        </div>
+        <p id="loginError" style="color: #ef4444; font-size: 11px; margin-top: 10px; display: none;">Invalid credentials!</p>
+    </div>
 
+    <!-- Hidden Key Reset View -->
+    <div class="modal-box" id="resetBox" style="display: none;">
+        <h3>Reset Password</h3>
+        <p>Enter secret master recovery key</p>
+        <div class="form-group">
+            <input type="password" id="recoveryKeyInput" placeholder="Secret Recovery Key" style="text-align: center;">
+        </div>
+        <div class="form-group">
+            <input type="password" id="newPassInput" placeholder="Enter New Password" style="text-align: center;">
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-submit" onclick="handleResetPassword()" style="flex: 1;"><i class="fa fa-check"></i> Verify & Save</button>
+            <button class="btn-action-sm" onclick="backToLoginView()" style="flex: 1; justify-content: center;"><i class="fa fa-arrow-left"></i> Back</button>
+        </div>
+        <p id="resetError" style="color: #ef4444; font-size: 11px; margin-top: 10px; display: none;">Invalid Recovery Key!</p>
+        <p id="resetSuccess" style="color: #10b981; font-size: 11px; margin-top: 10px; display: none;">Password changed successfully!</p>
+    </div>
+</div>
 
 <script>
+    // Configuration
+    const DEFAULT_PASS = "Ankit@565656";
+    const MASTER_RECOVERY_KEY = "ANKIT_SECURE_9907";
 
-    /* =====================================================
-       MENU
-    ===================================================== */
-
-    const menuLinks =
-        document.querySelectorAll(".nav a");
-
-    const sections =
-        document.querySelectorAll(".cv-section");
-
-
-    /* =====================================================
-       SHOW SELECTED PAGE
-    ===================================================== */
-
-    function showSection(sectionId) {
-
-        /* Hide all pages */
-
-        sections.forEach(function(section) {
-
-            section.classList.remove(
-                "active-section"
-            );
-
-        });
-
-
-        /* Remove active menu */
-
-        menuLinks.forEach(function(link) {
-
-            link.classList.remove("active");
-
-        });
-
-
-        /* Find selected section */
-
-        const selectedSection =
-            document.getElementById(sectionId);
-
-
-        /* Find selected menu */
-
-        const selectedMenu =
-            document.querySelector(
-                '.nav a[href="#' + sectionId + '"]'
-            );
-
-
-        if (selectedSection) {
-
-            selectedSection.classList.add(
-                "active-section"
-            );
-
-            /*
-               Har baar page open hone par
-               scroll top par reset.
-            */
-
-            selectedSection.scrollTop = 0;
-
-        }
-
-
-        if (selectedMenu) {
-
-            selectedMenu.classList.add("active");
-
-        }
-
+    function getActivePassword() {
+        return localStorage.getItem("custom_admin_pass") || DEFAULT_PASS;
     }
 
-
-    /* =====================================================
-       MENU CLICK
-    ===================================================== */
-
-    menuLinks.forEach(function(link) {
-
-        link.addEventListener(
-            "click",
-            function(event) {
-
-                event.preventDefault();
-
-
-                const sectionId =
-                    this.getAttribute("href")
-                    .substring(1);
-
-
-                showSection(sectionId);
-
-
-                history.replaceState(
-                    null,
-                    null,
-                    "#" + sectionId
-                );
-
-            }
-        );
-
+    /* Anti-Copy Protection */
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'x' || e.key === 'X' || e.key === 'u' || e.key === 'U')) {
+            e.preventDefault();
+        }
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c'))) {
+            e.preventDefault();
+        }
     });
 
+    /* Theme */
+    const themeToggle = document.getElementById("themeToggle");
+    const themeLabel = document.getElementById("themeLabel");
+    const themeIcon = document.getElementById("themeIcon");
 
-    /* =====================================================
-       LOGO CLICK
-    ===================================================== */
-
-    document
-        .querySelector(".logo a")
-        .addEventListener(
-            "click",
-            function(event) {
-
-                event.preventDefault();
-
-
-                showSection("Home");
-
-
-                history.replaceState(
-                    null,
-                    null,
-                    "#Home"
-                );
-
-            }
-        );
-
-
-    /* =====================================================
-       PAGE LOAD
-    ===================================================== */
-
-    window.addEventListener(
-        "load",
-        function() {
-
-            const hash =
-                window.location.hash;
-
-
-            if (hash) {
-
-                const sectionId =
-                    hash.substring(1);
-
-
-                if (
-                    document.getElementById(sectionId)
-                ) {
-
-                    showSection(sectionId);
-
-                } else {
-
-                    showSection("Home");
-
-                }
-
-            } else {
-
-                showSection("Home");
-
-            }
-
+    function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("resume_theme", theme);
+        if (theme === "dark") {
+            themeLabel.textContent = "Light Theme";
+            themeIcon.className = "fa fa-sun-o";
+        } else {
+            themeLabel.textContent = "Dark Theme";
+            themeIcon.className = "fa fa-moon-o";
         }
-    );
+    }
 
+    themeToggle.addEventListener("click", () => {
+        const current = document.documentElement.getAttribute("data-theme") || "light";
+        applyTheme(current === "dark" ? "light" : "dark");
+    });
+
+    /* Navigation */
+    const menuLinks = document.querySelectorAll(".nav a");
+    const sections = document.querySelectorAll(".cv-section");
+
+    function showSection(sectionId) {
+        sections.forEach(s => s.classList.remove("active-section"));
+        menuLinks.forEach(l => l.classList.remove("active"));
+
+        const selectedSection = document.getElementById(sectionId);
+        const selectedMenu = document.querySelector('.nav a[href="#' + sectionId + '"]');
+
+        if (selectedSection) {
+            selectedSection.classList.add("active-section");
+            selectedSection.scrollTop = 0;
+        }
+        if (selectedMenu) {
+            selectedMenu.classList.add("active");
+        }
+        if (sectionId === "Admin") {
+            renderInboxMessages();
+        }
+        if (sectionId === "Notes") {
+            renderAdminNotes();
+        }
+    }
+
+    menuLinks.forEach(link => {
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+            const sectionId = this.getAttribute("href").substring(1);
+            showSection(sectionId);
+            history.replaceState(null, null, "#" + sectionId);
+        });
+    });
+
+    document.querySelector(".logo a").addEventListener("click", function(e) {
+        e.preventDefault();
+        showSection("Home");
+        history.replaceState(null, null, "#Home");
+    });
+
+    /* Auth Logic */
+    function checkAuthState() {
+        const isLoggedIn = localStorage.getItem("admin_auth_state") === "true";
+        const adminTab = document.getElementById("adminNavTab");
+        const notesTab = document.getElementById("notesNavTab");
+        const authLabel = document.getElementById("authLabel");
+        const authIcon = document.getElementById("authIcon");
+
+        updateBadgeCount();
+        updateNotesBadge();
+
+        if (isLoggedIn) {
+            adminTab.style.display = "flex";
+            notesTab.style.display = "flex";
+            authLabel.textContent = "Logout";
+            authIcon.className = "fa fa-unlock";
+        } else {
+            adminTab.style.display = "none";
+            notesTab.style.display = "none";
+            authLabel.textContent = "Admin Access";
+            authIcon.className = "fa fa-lock";
+            if (document.getElementById("Admin").classList.contains("active-section") || 
+                document.getElementById("Notes").classList.contains("active-section")) {
+                showSection("Home");
+            }
+        }
+    }
+
+    function updateBadgeCount() {
+        const list = JSON.parse(localStorage.getItem("resume_inquiries") || "[]");
+        document.getElementById("inboxBadge").textContent = list.length;
+        document.getElementById("inquiryCount").textContent = list.length;
+    }
+
+    function updateNotesBadge() {
+        const notes = JSON.parse(localStorage.getItem("admin_keep_notes") || "[]");
+        document.getElementById("notesBadge").textContent = notes.length;
+        const countDisplay = document.getElementById("notesCountDisplay");
+        if(countDisplay) countDisplay.textContent = notes.length;
+    }
+
+    function handleAuthClick() {
+        const isLoggedIn = localStorage.getItem("admin_auth_state") === "true";
+        if (isLoggedIn) {
+            localStorage.removeItem("admin_auth_state");
+            checkAuthState();
+        } else {
+            document.getElementById("loginModal").style.display = "flex";
+            backToLoginView();
+            document.getElementById("adminPassInput").value = "";
+            document.getElementById("adminPassInput").focus();
+        }
+    }
+
+    function closeLoginModal() {
+        document.getElementById("loginModal").style.display = "none";
+    }
+
+    function attemptLogin() {
+        const entered = document.getElementById("adminPassInput").value.trim();
+
+        if (entered === getActivePassword()) {
+            localStorage.setItem("admin_auth_state", "true");
+            closeLoginModal();
+            checkAuthState();
+            showSection("Admin");
+        } else {
+            document.getElementById("loginError").style.display = "block";
+        }
+    }
+
+    function showForgotView() {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("resetBox").style.display = "block";
+        document.getElementById("recoveryKeyInput").value = "";
+        document.getElementById("newPassInput").value = "";
+        document.getElementById("resetError").style.display = "none";
+        document.getElementById("resetSuccess").style.display = "none";
+    }
+
+    function backToLoginView() {
+        document.getElementById("resetBox").style.display = "none";
+        document.getElementById("loginBox").style.display = "block";
+        document.getElementById("loginError").style.display = "none";
+    }
+
+    function handleResetPassword() {
+        const recoveryKey = document.getElementById("recoveryKeyInput").value.trim();
+        const newPass = document.getElementById("newPassInput").value.trim();
+        const resetError = document.getElementById("resetError");
+        const resetSuccess = document.getElementById("resetSuccess");
+
+        resetError.style.display = "none";
+        resetSuccess.style.display = "none";
+
+        if (!recoveryKey || !newPass) {
+            alert("Kripya Master Key aur Naya Password dono fill karein!");
+            return;
+        }
+
+        if (recoveryKey === MASTER_RECOVERY_KEY) {
+            localStorage.setItem("custom_admin_pass", newPass);
+            resetSuccess.style.display = "block";
+
+            setTimeout(() => {
+                backToLoginView();
+            }, 1200);
+        } else {
+            resetError.style.display = "block";
+        }
+    }
+
+    /* Contact Form Submit */
+    document.getElementById("cvContactForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const now = new Date();
+        const timeStr = now.toLocaleDateString('en-GB') + ' - ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const messageObj = {
+            id: Date.now(),
+            name: document.getElementById("formName").value.trim(),
+            email: document.getElementById("formEmail").value.trim(),
+            phone: document.getElementById("formPhone").value.trim() || 'Not Provided',
+            msg: document.getElementById("formMessage").value.trim(),
+            date: timeStr
+        };
+
+        let list = JSON.parse(localStorage.getItem("resume_inquiries") || "[]");
+        list.unshift(messageObj);
+        localStorage.setItem("resume_inquiries", JSON.stringify(list));
+
+        updateBadgeCount();
+
+        const alertBox = document.getElementById("contactSuccessAlert");
+        alertBox.style.display = "block";
+        document.getElementById("cvContactForm").reset();
+
+        setTimeout(() => {
+            alertBox.style.display = "none";
+        }, 4000);
+    });
+
+    /* Inbox Render */
+    function renderInboxMessages() {
+        const list = JSON.parse(localStorage.getItem("resume_inquiries") || "[]");
+        const container = document.getElementById("inboxListContainer");
+        updateBadgeCount();
+
+        if (list.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: var(--text-light); padding: 30px;">No messages received yet.</p>`;
+            return;
+        }
+
+        container.innerHTML = list.map(item => `
+            <div class="inquiry-card">
+                <div class="inquiry-card-header">
+                    <h4>${escapeHTML(item.name)}</h4>
+                    <span style="font-size: 11px; color: var(--text-light);">${item.date}</span>
+                </div>
+                <div class="inquiry-meta">
+                    <span><i class="fa fa-envelope"></i> ${escapeHTML(item.email)}</span>
+                    <span><i class="fa fa-phone"></i> ${escapeHTML(item.phone)}</span>
+                </div>
+                <div class="inquiry-msg">
+                    ${escapeHTML(item.msg)}
+                </div>
+                <div class="inquiry-actions">
+                    <a href="mailto:${encodeURIComponent(item.email)}?subject=Re: Inquiring about resume - Ankit Kumar" class="btn-action-sm">
+                        <i class="fa fa-reply"></i> Reply
+                    </a>
+                    <button class="btn-action-sm btn-del" onclick="deleteMessage(${item.id})">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function deleteMessage(id) {
+        if (confirm("Delete this message?")) {
+            let list = JSON.parse(localStorage.getItem("resume_inquiries") || "[]");
+            list = list.filter(m => m.id !== id);
+            localStorage.setItem("resume_inquiries", JSON.stringify(list));
+            renderInboxMessages();
+        }
+    }
+
+    function clearAllMessages() {
+        if (confirm("Are you sure you want to clear all responses?")) {
+            localStorage.setItem("resume_inquiries", JSON.stringify([]));
+            renderInboxMessages();
+        }
+    }
+
+    function exportToCSV() {
+        const list = JSON.parse(localStorage.getItem("resume_inquiries") || "[]");
+        if (list.length === 0) {
+            alert("No data available to export!");
+            return;
+        }
+
+        let csv = "data:text/csv;charset=utf-8,ID,Name,Email,Phone,Message,Date\n";
+        list.forEach(r => {
+            const clean = r.msg.replace(/"/g, '""').replace(/\n/g, ' ');
+            csv += `"${r.id}","${r.name}","${r.email}","${r.phone}","${clean}","${r.date}"\n`;
+        });
+
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csv));
+        link.setAttribute("download", `Responses_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    /* KEEP NOTES FUNCTIONS */
+    function saveAdminNote() {
+        const title = document.getElementById('noteTitle').value.trim();
+        const content = document.getElementById('noteContent').value.trim();
+        const fileInput = document.getElementById('noteFile');
+        const file = fileInput.files[0];
+
+        if (!title && !content && !file) {
+            alert("Kripya title, details ya file attach karein!");
+            return;
+        }
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                storeNoteData(title, content, e.target.result, file.type, file.name);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            storeNoteData(title, content, null, null, null);
+        }
+    }
+
+    function storeNoteData(title, content, fileData, fileType, fileName) {
+        const notes = JSON.parse(localStorage.getItem("admin_keep_notes") || "[]");
+        const newNote = {
+            id: Date.now(),
+            title: title || 'Untitled Note',
+            content: content,
+            fileData: fileData,
+            fileType: fileType,
+            fileName: fileName,
+            date: new Date().toLocaleDateString('en-GB')
+        };
+
+        notes.unshift(newNote);
+        localStorage.setItem("admin_keep_notes", JSON.stringify(notes));
+
+        document.getElementById('noteTitle').value = '';
+        document.getElementById('noteContent').value = '';
+        document.getElementById('noteFile').value = '';
+
+        updateNotesBadge();
+        renderAdminNotes();
+    }
+
+    function renderAdminNotes() {
+        const notes = JSON.parse(localStorage.getItem("admin_keep_notes") || "[]");
+        const container = document.getElementById("notesListContainer");
+        updateNotesBadge();
+
+        if (notes.length === 0) {
+            container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-light); padding: 30px;">No notes created yet. Add one above!</p>`;
+            return;
+        }
+
+        container.innerHTML = notes.map(note => {
+            let fileAttachment = '';
+            if (note.fileData) {
+                if (note.fileType && note.fileType.startsWith('image/')) {
+                    fileAttachment = `<img src="${note.fileData}" alt="Note Image">`;
+                } else {
+                    fileAttachment = `<a href="${note.fileData}" download="${note.fileName}" class="note-file-badge"><i class="fa fa-paperclip"></i> ${escapeHTML(note.fileName)}</a>`;
+                }
+            }
+
+            return `
+                <div class="note-item">
+                    <button class="btn-del-note" onclick="deleteAdminNote(${note.id})" title="Delete Note">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <div>
+                        <h4>${escapeHTML(note.title)}</h4>
+                        <span style="font-size: 10px; color: var(--text-light); display: block; margin-bottom: 8px;">Created: ${note.date}</span>
+                        <p>${escapeHTML(note.content)}</p>
+                    </div>
+                    ${fileAttachment}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function deleteAdminNote(id) {
+        if (confirm("Delete this note?")) {
+            let notes = JSON.parse(localStorage.getItem("admin_keep_notes") || "[]");
+            notes = notes.filter(n => n.id !== id);
+            localStorage.setItem("admin_keep_notes", JSON.stringify(notes));
+            renderAdminNotes();
+        }
+    }
+
+    function escapeHTML(str) {
+        return String(str).replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+
+    /* Init */
+    window.addEventListener("load", function() {
+        applyTheme(localStorage.getItem("resume_theme") || "light");
+        checkAuthState();
+
+        const hash = window.location.hash;
+        if (hash && document.getElementById(hash.substring(1))) {
+            showSection(hash.substring(1));
+        } else {
+            showSection("Home");
+        }
+    });
 </script>
 
-
 </body>
-
 </html>
