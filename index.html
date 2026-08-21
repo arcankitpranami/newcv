@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,42 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <style>
+    :root {
+      --bg-body: #ffffff;
+      --sidebar-bg: #ffffff;
+      --sidebar-border: #f0f0f0;
+      --text-main: #111111;
+      --text-muted: #666666;
+      --text-light: #999999;
+      --card-bg: #fafafa;
+      --border-color: #eeeeee;
+      --primary: #111111;
+      --primary-inv: #ffffff;
+      --input-bg: #ffffff;
+      --badge-bg: #ef4444;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0f1117;
+      --sidebar-bg: #161922;
+      --sidebar-border: #232733;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-light: #6b7280;
+      --card-bg: #1f2430;
+      --border-color: #2e3444;
+      --primary: #ffffff;
+      --primary-inv: #111111;
+      --input-bg: #1a1e29;
+      --badge-bg: #ef4444;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -18,54 +53,19 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #ffffff;
-      color: #666666;
+      background-color: var(--bg-body);
+      color: var(--text-muted);
       display: flex;
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Mobile Header */
-    .mobile-header {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background-color: #ffffff;
-      border-bottom: 1px solid #eeeeee;
-      padding: 0 20px;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 1000;
-    }
-
-    .mobile-brand {
-      background-color: #000000;
-      color: #ffffff;
-      padding: 6px 12px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 800;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-
-    .menu-toggle-btn {
-      background: none;
-      border: none;
-      font-size: 22px;
-      color: #111111;
-      cursor: pointer;
-      padding: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* Left Sidebar */
     .sidebar {
       width: 280px;
       min-height: 100vh;
-      background-color: #ffffff;
-      border-right: 1px solid #f0f0f0;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -75,21 +75,8 @@
       position: sticky;
       top: 0;
       height: 100vh;
-      z-index: 1100;
-      transition: transform 0.3s ease;
-    }
-
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 1050;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      overflow-y: auto;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .brand-box {
@@ -104,6 +91,7 @@
       line-height: 1.3;
       align-self: flex-start;
       margin-left: -35px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .nav-links {
@@ -114,24 +102,26 @@
     }
 
     .nav-links li {
-      margin: 16px 0;
+      margin: 14px 0;
     }
 
     .nav-links a {
       text-decoration: none;
-      color: #999999;
+      color: var(--text-light);
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
-      transition: color 0.2s;
+      transition: color 0.25s, transform 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       position: relative;
-      display: inline-block;
     }
 
     .nav-links a.active,
     .nav-links a:hover {
-      color: #111111;
+      color: var(--text-main);
     }
 
     .nav-links a.active::after {
@@ -141,14 +131,53 @@
       right: 0;
       width: 100%;
       height: 2px;
-      background-color: #111111;
+      background-color: var(--text-main);
+    }
+
+    .sidebar-badge {
+      background-color: var(--badge-bg);
+      color: #ffffff;
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 10px;
+      font-weight: 700;
     }
 
     .sidebar-footer {
       text-align: right;
       font-size: 11px;
-      color: #999999;
+      color: var(--text-light);
       width: 100%;
+    }
+
+    .sidebar-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+      align-items: flex-end;
+    }
+
+    .btn-side {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
+
+    .btn-side:hover {
+      color: var(--text-main);
+      border-color: var(--text-main);
     }
 
     .social-icons {
@@ -156,21 +185,22 @@
     }
 
     .social-icons a {
-      color: #666666;
+      color: var(--text-muted);
       margin-left: 12px;
       text-decoration: none;
       font-size: 14px;
-      transition: color 0.2s;
+      transition: color 0.2s, transform 0.2s;
+      display: inline-block;
     }
 
     .social-icons a:hover {
-      color: #000000;
+      color: var(--text-main);
+      transform: translateY(-2px);
     }
 
     .sidebar-footer p {
       margin-top: 3px;
       line-height: 1.4;
-      word-break: break-all;
     }
 
     /* Main Content */
@@ -181,15 +211,13 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      overflow-x: hidden;
     }
 
     .cv-section {
       display: none;
       width: 100%;
       max-width: 900px;
-      margin: 0 auto;
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.4s ease forwards;
     }
 
     .cv-section.active-section {
@@ -197,7 +225,7 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -207,19 +235,19 @@
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: #111111;
-      margin-bottom: 35px;
+      color: var(--text-main);
+      margin-bottom: 45px;
     }
 
     .page-title span {
       display: block;
       font-size: 10px;
-      color: #999999;
+      color: var(--text-light);
       letter-spacing: 2px;
       margin-bottom: 4px;
     }
 
-    /* Home Layout */
+    /* 1. Home Profile Grid */
     .profile-grid {
       display: grid;
       grid-template-columns: 320px 1fr;
@@ -229,9 +257,9 @@
 
     .profile-image-container {
       width: 100%;
-      height: 380px;
-      background-color: #fafafa;
-      border: 1px solid #eeeeee;
+      height: 390px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -242,11 +270,15 @@
       object-fit: cover;
     }
 
+    .profile-details {
+      max-width: 520px;
+    }
+
     .greeting {
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 2px;
-      color: #999999;
+      color: var(--text-light);
       text-transform: uppercase;
       margin-bottom: 6px;
     }
@@ -256,7 +288,7 @@
       font-size: 38px;
       font-weight: 800;
       letter-spacing: 1px;
-      color: #111111;
+      color: var(--text-main);
       text-transform: uppercase;
       margin-bottom: 6px;
       line-height: 1.1;
@@ -266,7 +298,7 @@
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 2px;
-      color: #666666;
+      color: var(--text-muted);
       text-transform: uppercase;
       margin-bottom: 18px;
     }
@@ -274,17 +306,18 @@
     .bio {
       font-size: 13px;
       line-height: 1.8;
-      color: #666666;
+      color: var(--text-muted);
       margin-bottom: 25px;
     }
 
     .contact-info {
       list-style: none;
+      margin-bottom: 25px;
     }
 
     .contact-info li {
       font-size: 13px;
-      color: #666666;
+      color: var(--text-muted);
       margin-bottom: 8px;
       display: flex;
       align-items: center;
@@ -294,7 +327,7 @@
     .contact-info li i {
       font-size: 13px;
       width: 18px;
-      color: #111111;
+      color: var(--text-main);
     }
 
     /* Strengths & Skills */
@@ -305,8 +338,9 @@
 
     .strength-list li {
       padding: 10px 0;
-      border-bottom: 1px solid #eeeeee;
+      border-bottom: 1px solid var(--border-color);
       font-size: 13px;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -325,7 +359,7 @@
       justify-content: space-between;
       font-size: 12px;
       font-weight: 600;
-      color: #111111;
+      color: var(--text-main);
       margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -334,17 +368,17 @@
     .skill-bar {
       width: 100%;
       height: 6px;
-      background-color: #eeeeee;
+      background-color: var(--border-color);
       border-radius: 3px;
       overflow: hidden;
     }
 
     .skill-fill {
       height: 100%;
-      background-color: #111111;
+      background-color: var(--text-main);
     }
 
-    /* Portfolio */
+    /* Portfolio Grid */
     .portfolio-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -353,38 +387,38 @@
 
     .project-card {
       padding: 24px;
-      background-color: #fafafa;
-      border: 1px solid #eeeeee;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       transition: transform 0.2s, border-color 0.2s;
     }
 
     .project-card:hover {
       transform: translateY(-3px);
-      border-color: #111111;
+      border-color: var(--text-main);
     }
 
     .project-card i {
       font-size: 24px;
       margin-bottom: 12px;
-      color: #111111;
+      color: var(--text-main);
     }
 
     .project-card h3 {
       font-size: 16px;
-      color: #111111;
+      color: var(--text-main);
       margin-bottom: 8px;
     }
 
     .project-card p {
       font-size: 12px;
-      color: #666666;
+      color: var(--text-muted);
       line-height: 1.6;
     }
 
     /* Timeline */
     .timeline {
-      border-left: 2px solid #111111;
+      border-left: 2px solid var(--text-main);
       padding-left: 20px;
       margin-left: 10px;
     }
@@ -401,8 +435,8 @@
       top: 4px;
       width: 10px;
       height: 10px;
-      background-color: #ffffff;
-      border: 2px solid #111111;
+      background-color: var(--bg-body);
+      border: 2px solid var(--text-main);
       border-radius: 50%;
     }
 
@@ -410,21 +444,21 @@
       font-size: 10px;
       font-weight: 700;
       letter-spacing: 1.5px;
-      color: #999999;
+      color: var(--text-light);
     }
 
     .timeline-item h3 {
       font-size: 16px;
-      color: #111111;
+      color: var(--text-main);
       margin: 4px 0;
     }
 
     .timeline-item p {
       font-size: 12px;
-      color: #666666;
+      color: var(--text-muted);
     }
 
-    /* Contact Form */
+    /* Forms */
     .form-group {
       margin-bottom: 16px;
     }
@@ -436,16 +470,16 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       margin-bottom: 6px;
-      color: #111111;
+      color: var(--text-main);
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
       padding: 12px 14px;
-      border: 1px solid #eeeeee;
-      background-color: #ffffff;
-      color: #111111;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-bg);
+      color: var(--text-main);
       border-radius: 4px;
       font-size: 13px;
       font-family: inherit;
@@ -455,12 +489,12 @@
 
     .form-group input:focus,
     .form-group textarea:focus {
-      border-color: #111111;
+      border-color: var(--text-main);
     }
 
     .btn-main {
-      background-color: #111111;
-      color: #ffffff;
+      background-color: var(--text-main);
+      color: var(--bg-body);
       border: none;
       padding: 12px 26px;
       font-size: 11px;
@@ -472,132 +506,219 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      transition: opacity 0.2s;
     }
 
     .btn-main:hover {
       opacity: 0.85;
     }
 
-    /* Tablet Responsive */
-    @media (max-width: 1024px) {
-      .sidebar {
-        width: 240px;
-        padding: 30px 20px;
-      }
-      .brand-box {
-        margin-left: -20px;
-      }
-      .main-content {
-        padding: 40px 40px;
-      }
-      .profile-grid {
-        gap: 30px;
-        grid-template-columns: 260px 1fr;
-      }
-      .profile-image-container {
-        height: 320px;
-      }
-      .profile-name {
-        font-size: 30px;
-      }
+    .alert-success {
+      display: none;
+      padding: 12px;
+      background-color: rgba(16, 185, 129, 0.1);
+      border: 1px solid #10b981;
+      color: #10b981;
+      font-size: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
     }
 
-    /* Mobile Responsive (Below 768px) */
-    @media (max-width: 768px) {
+    /* Admin Inbox & Notes */
+    .admin-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .inquiry-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--text-main);
+      padding: 16px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .inquiry-card h4 {
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .inquiry-meta {
+      font-size: 11px;
+      color: var(--text-light);
+      display: flex;
+      gap: 15px;
+      margin: 6px 0 10px;
+    }
+
+    .inquiry-msg {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg-body);
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 3px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-del {
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--text-main);
+      padding: 16px;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .note-card h4 {
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      padding-right: 25px;
+    }
+
+    .note-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      margin-top: 6px;
+    }
+
+    .note-card img {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 10px;
+      max-height: 160px;
+      object-fit: cover;
+    }
+
+    .del-note-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    #authModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border-color);
+      padding: 30px;
+      border-radius: 6px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
       body {
         flex-direction: column;
       }
 
-      .mobile-header {
-        display: flex;
-      }
-
-      .sidebar-overlay.active {
-        display: block;
-        opacity: 1;
-      }
-
-      /* Sidebar Drawer on Mobile */
       .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 270px;
-        transform: translateX(-100%);
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-        align-items: flex-start;
-        padding: 30px 25px;
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--sidebar-border);
+        align-items: center;
+        padding: 25px 20px;
       }
 
       .brand-box {
         margin-left: 0;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
       }
 
       .nav-links {
-        text-align: left;
-        margin: 10px 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
       }
 
-      .nav-links a.active::after {
-        right: auto;
-        left: 0;
+      .nav-links li {
+        margin: 0;
       }
 
       .sidebar-footer {
-        text-align: left;
+        text-align: center;
+        margin-top: 15px;
       }
 
-      .social-icons a {
-        margin-left: 0;
-        margin-right: 14px;
+      .sidebar-actions {
+        align-items: center;
       }
 
-      /* Main Content on Mobile */
       .main-content {
-        padding: 90px 20px 40px;
+        padding: 40px 20px;
       }
 
-      .profile-grid {
+      .profile-grid, .portfolio-grid, .notes-grid {
         grid-template-columns: 1fr;
-        gap: 25px;
       }
 
       .profile-image-container {
-        max-width: 100%;
-        height: 300px;
-      }
-
-      .portfolio-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .profile-name {
-        font-size: 26px;
+        max-width: 320px;
+        margin: 0 auto;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Mobile Top Header Bar -->
-  <header class="mobile-header">
-    <div class="mobile-brand">MY RESUME</div>
-    <button class="menu-toggle-btn" id="menuToggle" aria-label="Toggle menu">
-      <i class="fa-solid fa-bars" id="menuIcon"></i>
-    </button>
-  </header>
-
-  <!-- Dark Backdrop for Mobile Drawer -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-  <!-- Left Sidebar Navigation -->
-  <aside class="sidebar" id="sidebar">
+  <!-- Left Sidebar -->
+  <aside class="sidebar">
     <div class="brand-box">
       MY<br>RESUME
     </div>
@@ -609,9 +730,22 @@
       <li><a href="#Portfolio">PORTFOLIO</a></li>
       <li><a href="#Education">EDUCATION</a></li>
       <li><a href="#Contact">CONTACT</a></li>
+      <li id="adminNav" style="display: none;"><a href="#Admin">INBOX <span class="sidebar-badge" id="inboxBadge">0</span></a></li>
+      <li id="notesNav" style="display: none;"><a href="#Notes">NOTES <span class="sidebar-badge" id="notesBadge">0</span></a></li>
     </ul>
 
     <div class="sidebar-footer">
+      <div class="sidebar-actions">
+        <button class="btn-side" id="themeBtn">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+          <span id="themeLabel">Dark Mode</span>
+        </button>
+        <button class="btn-side" id="authSideBtn" onclick="handleAuthClick()">
+          <i class="fa-solid fa-lock" id="authIcon"></i>
+          <span id="authLabel">Admin Access</span>
+        </button>
+      </div>
+
       <div class="social-icons">
         <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
         <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
@@ -624,7 +758,7 @@
     </div>
   </aside>
 
-  <!-- Main Content Area -->
+  <!-- Main Content -->
   <main class="main-content">
 
     <!-- 1. HOME -->
@@ -659,10 +793,10 @@
         <span>ABOUT</span>
         ABOUT ME
       </div>
-      <h2 style="font-size: 20px; color: #111111; margin-bottom: 12px;">Hello, I'm Ankit Kumar</h2>
+      <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 12px;">Hello, I'm Ankit Kumar</h2>
       <p class="bio">I am a passionate Frontend Developer interested in creating modern, clean and responsive websites. I create attractive user interfaces using HTML, CSS, JavaScript, and Elementor.</p>
       
-      <h3 style="font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: #111111; margin: 25px 0 10px;">My Strengths</h3>
+      <h3 style="font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-main); margin: 25px 0 10px;">My Strengths</h3>
       <ul class="strength-list">
         <li><i class="fa-solid fa-circle-check"></i> Responsive Web Design</li>
         <li><i class="fa-solid fa-circle-check"></i> HTML & CSS Mastery</li>
@@ -716,12 +850,12 @@
         <div class="project-card">
           <i class="fa-solid fa-laptop-code"></i>
           <h3>Portfolio Website</h3>
-          <p>A responsive personal portfolio website created using HTML, modern CSS and JavaScript.</p>
+          <p>A responsive personal portfolio website created using semantic HTML, modern CSS and JavaScript.</p>
         </div>
         <div class="project-card">
           <i class="fa-solid fa-cart-shopping"></i>
           <h3>E-Commerce Website</h3>
-          <p>Modern online store mockup featuring clean UI and interactive components.</p>
+          <p>Modern online store mockup featuring clean UI and interactive product catalog components.</p>
         </div>
         <div class="project-card">
           <i class="fa-brands fa-wordpress-simple"></i>
@@ -762,76 +896,433 @@
         <span>CONTACT</span>
         GET IN TOUCH
       </div>
-      <form action="mailto:arcankitpranami@gmail.com" method="post" enctype="text/plain">
+      <div id="contactAlert" class="alert-success">
+        <i class="fa-solid fa-circle-check"></i> Thank you! Message submitted to Firebase database.
+      </div>
+      <form id="contactForm">
         <div class="form-group">
           <label>Full Name</label>
-          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="text" id="cName" placeholder="Your Name" required>
         </div>
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" name="email" placeholder="yourname@domain.com" required>
+          <input type="email" id="cEmail" placeholder="yourname@domain.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number (Optional)</label>
+          <input type="tel" id="cPhone" placeholder="+91 98765 43210">
         </div>
         <div class="form-group">
           <label>Message</label>
-          <textarea name="message" rows="4" placeholder="Your message..." required></textarea>
+          <textarea id="cMsg" rows="4" placeholder="Your message or project requirements..." required></textarea>
         </div>
-        <button type="submit" class="btn-main">
+        <button type="submit" class="btn-main" id="submitBtn">
           <i class="fa-solid fa-paper-plane"></i> Send Message
         </button>
       </form>
     </section>
 
+    <!-- 7. ADMIN INBOX -->
+    <section id="Admin" class="cv-section">
+      <div class="page-title">
+        <span>ADMIN</span>
+        CLIENT INBOX
+      </div>
+      <div class="admin-bar">
+        <h3 style="font-size: 14px; color: var(--text-main);">Responses (<span id="inquiryCount">0</span>)</h3>
+        <div>
+          <button class="btn-sm" onclick="exportToCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+          <button class="btn-sm btn-del" onclick="clearAllMessages()"><i class="fa-solid fa-trash"></i> Clear All</button>
+        </div>
+      </div>
+      <div id="inboxList"></div>
+    </section>
+
+    <!-- 8. KEEP NOTES -->
+    <section id="Notes" class="cv-section">
+      <div class="page-title">
+        <span>ADMIN</span>
+        KEEP NOTES
+      </div>
+      <div style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 4px; margin-bottom: 25px;">
+        <div class="form-group">
+          <input type="text" id="nTitle" placeholder="Note Title...">
+        </div>
+        <div class="form-group">
+          <textarea id="nContent" rows="3" placeholder="Note text..."></textarea>
+        </div>
+        <div class="form-group">
+          <input type="file" id="nFile" accept="image/*,.pdf,.doc,.docx" style="padding: 6px;">
+        </div>
+        <button class="btn-main" id="saveNoteBtn" onclick="saveAdminNote()">
+          <i class="fa-solid fa-plus"></i> Save Note
+        </button>
+      </div>
+      <div class="notes-grid" id="notesList"></div>
+    </section>
+
   </main>
 
+  <!-- Login Modal -->
+  <div id="authModal">
+    <div class="modal-content">
+      <h3 style="font-size: 16px; color: var(--text-main); margin-bottom: 8px;">Firebase Admin Login</h3>
+      <p style="font-size: 12px; color: var(--text-light); margin-bottom: 18px;">Sign in to access admin tools</p>
+      
+      <div class="form-group">
+        <input type="email" id="adminEmail" placeholder="Admin Email" style="text-align: center;">
+      </div>
+      <div class="form-group">
+        <input type="password" id="adminPass" placeholder="Password" style="text-align: center;">
+      </div>
+      <p id="loginError" style="color: #ef4444; font-size: 11px; margin-bottom: 10px; display: none;"></p>
+      
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-main" style="flex: 1; justify-content: center;" id="modalLoginBtn" onclick="attemptLogin()">Login</button>
+        <button class="btn-sm" style="flex: 1; justify-content: center;" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // 1. FIREBASE CONFIGURATION
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGrTsA0Q9Tj4yzazatmxinsL5AqlPyhlQ",
+      authDomain: "cv-database-6f02d.firebaseapp.com",
+      projectId: "cv-database-6f02d",
+      storageBucket: "cv-database-6f02d.firebasestorage.app",
+      messagingSenderId: "546654148018",
+      appId: "1:546654148018:web:b3997aa7299f9be3eb80ab",
+      measurementId: "G-LQJZHVPNCZV"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let cachedInquiries = [];
+    let cachedNotes = [];
+    let unsubInquiries = null;
+    let unsubNotes = null;
+
+    // 2. THEME SWITCHER
+    const themeBtn = document.getElementById("themeBtn");
+    const themeLabel = document.getElementById("themeLabel");
+    const themeIcon = document.getElementById("themeIcon");
+
+    function setTheme(mode) {
+      document.documentElement.setAttribute("data-theme", mode);
+      localStorage.setItem("user_theme", mode);
+      themeLabel.textContent = mode === "dark" ? "Light Mode" : "Dark Mode";
+      themeIcon.className = mode === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    }
+
+    themeBtn.addEventListener("click", () => {
+      const active = document.documentElement.getAttribute("data-theme") || "light";
+      setTheme(active === "dark" ? "light" : "dark");
+    });
+
+    // 3. TAB NAVIGATION
     const navLinks = document.querySelectorAll(".nav-links a");
     const sections = document.querySelectorAll(".cv-section");
-    const sidebar = document.getElementById("sidebar");
-    const menuToggle = document.getElementById("menuToggle");
-    const menuIcon = document.getElementById("menuIcon");
-    const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-    // Drawer Toggle Logic
-    function toggleDrawer() {
-      const isOpen = sidebar.classList.toggle("open");
-      sidebarOverlay.classList.toggle("active", isOpen);
-      menuIcon.className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+    function navigateTo(id) {
+      sections.forEach(s => s.classList.remove("active-section"));
+      navLinks.forEach(l => l.classList.remove("active"));
+
+      const targetSection = document.getElementById(id);
+      const targetNav = document.querySelector(`.nav-links a[href="#${id}"]`);
+
+      if (targetSection) targetSection.classList.add("active-section");
+      if (targetNav) targetNav.classList.add("active");
     }
 
-    function closeDrawer() {
-      sidebar.classList.remove("open");
-      sidebarOverlay.classList.remove("active");
-      menuIcon.className = "fa-solid fa-bars";
-    }
-
-    menuToggle.addEventListener("click", toggleDrawer);
-    sidebarOverlay.addEventListener("click", closeDrawer);
-
-    // Section Switching Logic
     navLinks.forEach(link => {
       link.addEventListener("click", function(e) {
         e.preventDefault();
-        const targetId = this.getAttribute("href").substring(1);
-
-        sections.forEach(s => s.classList.remove("active-section"));
-        navLinks.forEach(l => l.classList.remove("active"));
-
-        const activeSec = document.getElementById(targetId);
-        if (activeSec) activeSec.classList.add("active-section");
-        this.classList.add("active");
-
-        history.replaceState(null, null, "#" + targetId);
-        closeDrawer();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const secId = this.getAttribute("href").substring(1);
+        navigateTo(secId);
+        history.replaceState(null, null, "#" + secId);
       });
     });
 
-    // Hash check on load
+    // 4. AUTHENTICATION
+    auth.onAuthStateChanged(user => {
+      const adminNav = document.getElementById("adminNav");
+      const notesNav = document.getElementById("notesNav");
+      const authLabel = document.getElementById("authLabel");
+      const authIcon = document.getElementById("authIcon");
+
+      if (user) {
+        adminNav.style.display = "block";
+        notesNav.style.display = "block";
+        authLabel.textContent = "Logout";
+        authIcon.className = "fa-solid fa-unlock";
+        listenInquiries();
+        listenNotes();
+      } else {
+        adminNav.style.display = "none";
+        notesNav.style.display = "none";
+        authLabel.textContent = "Admin Access";
+        authIcon.className = "fa-solid fa-lock";
+
+        if (unsubInquiries) unsubInquiries();
+        if (unsubNotes) unsubNotes();
+
+        if (document.getElementById("Admin").classList.contains("active-section") ||
+            document.getElementById("Notes").classList.contains("active-section")) {
+          navigateTo("Home");
+        }
+      }
+    });
+
+    function handleAuthClick() {
+      if (auth.currentUser) {
+        auth.signOut();
+      } else {
+        document.getElementById("authModal").style.display = "flex";
+        document.getElementById("adminEmail").value = "";
+        document.getElementById("adminPass").value = "";
+        document.getElementById("loginError").style.display = "none";
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("authModal").style.display = "none";
+    }
+
+    function attemptLogin() {
+      const email = document.getElementById("adminEmail").value.trim();
+      const pass = document.getElementById("adminPass").value.trim();
+      const errBox = document.getElementById("loginError");
+      const btn = document.getElementById("modalLoginBtn");
+
+      if (!email || !pass) {
+        errBox.textContent = "Please provide email and password.";
+        errBox.style.display = "block";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => {
+          closeModal();
+          navigateTo("Admin");
+        })
+        .catch(err => {
+          errBox.textContent = err.message;
+          errBox.style.display = "block";
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.innerHTML = 'Login';
+        });
+    }
+
+    // 5. CONTACT FORM HANDLER
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+      const data = {
+        name: document.getElementById("cName").value.trim(),
+        email: document.getElementById("cEmail").value.trim(),
+        phone: document.getElementById("cPhone").value.trim() || 'Not Provided',
+        msg: document.getElementById("cMsg").value.trim(),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        await db.collection("inquiries").add(data);
+        const alert = document.getElementById("contactAlert");
+        alert.style.display = "block";
+        this.reset();
+        setTimeout(() => alert.style.display = "none", 4000);
+      } catch (err) {
+        alert("Submission Failed: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+      }
+    });
+
+    function listenInquiries() {
+      unsubInquiries = db.collection("inquiries").orderBy("timestamp", "desc").onSnapshot(snap => {
+        cachedInquiries = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          cachedInquiries.push({
+            id: doc.id,
+            name: d.name,
+            email: d.email,
+            phone: d.phone,
+            msg: d.msg,
+            date: d.timestamp ? d.timestamp.toDate().toLocaleString('en-GB') : 'Just now'
+          });
+        });
+
+        document.getElementById("inboxBadge").textContent = cachedInquiries.length;
+        document.getElementById("inquiryCount").textContent = cachedInquiries.length;
+        renderInquiries();
+      });
+    }
+
+    function renderInquiries() {
+      const container = document.getElementById("inboxList");
+      if (!cachedInquiries.length) {
+        container.innerHTML = `<p style="color: var(--text-light); text-align: center; padding: 20px;">No messages found.</p>`;
+        return;
+      }
+
+      container.innerHTML = cachedInquiries.map(item => `
+        <div class="inquiry-card">
+          <h4>${escapeHTML(item.name)}</h4>
+          <div class="inquiry-meta">
+            <span><i class="fa-solid fa-envelope"></i> ${escapeHTML(item.email)}</span>
+            <span><i class="fa-solid fa-phone"></i> ${escapeHTML(item.phone)}</span>
+            <span>${item.date}</span>
+          </div>
+          <div class="inquiry-msg">${escapeHTML(item.msg)}</div>
+          <div style="display: flex; gap: 8px;">
+            <a href="mailto:${encodeURIComponent(item.email)}" class="btn-sm"><i class="fa-solid fa-reply"></i> Reply</a>
+            <button class="btn-sm btn-del" onclick="deleteMessage('${item.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function deleteMessage(id) {
+      if (confirm("Delete this message?")) await db.collection("inquiries").doc(id).delete();
+    }
+
+    async function clearAllMessages() {
+      if (confirm("Clear all responses?")) {
+        const batch = db.batch();
+        const snap = await db.collection("inquiries").get();
+        snap.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+      }
+    }
+
+    function exportToCSV() {
+      if (!cachedInquiries.length) return alert("No data to export.");
+      let csv = "data:text/csv;charset=utf-8,ID,Name,Email,Phone,Message,Date\n";
+      cachedInquiries.forEach(i => {
+        csv += `"${i.id}","${i.name}","${i.email}","${i.phone}","${i.msg.replace(/"/g, '""')}","${i.date}"\n`;
+      });
+      const link = document.createElement("a");
+      link.href = encodeURI(csv);
+      link.download = `Inquiries_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // 6. KEEP NOTES HANDLER
+    async function saveAdminNote() {
+      const title = document.getElementById("nTitle").value.trim();
+      const content = document.getElementById("nContent").value.trim();
+      const fileInput = document.getElementById("nFile");
+      const file = fileInput.files[0];
+      const btn = document.getElementById("saveNoteBtn");
+
+      if (!title && !content && !file) return alert("Please fill at least one field!");
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          await storeNote(title, content, e.target.result, file.type, file.name);
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-plus"></i> Save Note';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await storeNote(title, content, null, null, null);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-plus"></i> Save Note';
+      }
+    }
+
+    async function storeNote(title, content, fileData, fileType, fileName) {
+      try {
+        await db.collection("keep_notes").add({
+          title: title || 'Untitled Note',
+          content: content,
+          fileData: fileData,
+          fileType: fileType,
+          fileName: fileName,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        document.getElementById("nTitle").value = '';
+        document.getElementById("nContent").value = '';
+        document.getElementById("nFile").value = '';
+      } catch (err) {
+        alert("Failed to save note: " + err.message);
+      }
+    }
+
+    function listenNotes() {
+      unsubNotes = db.collection("keep_notes").orderBy("timestamp", "desc").onSnapshot(snap => {
+        cachedNotes = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          cachedNotes.push({
+            id: doc.id,
+            title: d.title,
+            content: d.content,
+            fileData: d.fileData,
+            fileType: d.fileType,
+            fileName: d.fileName
+          });
+        });
+        document.getElementById("notesBadge").textContent = cachedNotes.length;
+        renderNotes();
+      });
+    }
+
+    function renderNotes() {
+      const container = document.getElementById("notesList");
+      if (!cachedNotes.length) {
+        container.innerHTML = `<p style="grid-column: 1/-1; color: var(--text-light); text-align: center; padding: 20px;">No notes added yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = cachedNotes.map(n => `
+        <div class="note-card">
+          <button class="del-note-btn" onclick="deleteNote('${n.id}')"><i class="fa-solid fa-trash"></i></button>
+          <h4>${escapeHTML(n.title)}</h4>
+          <p>${escapeHTML(n.content)}</p>
+          ${n.fileData && n.fileType && n.fileType.startsWith('image/') ? `<img src="${n.fileData}">` : ''}
+          ${n.fileData && (!n.fileType || !n.fileType.startsWith('image/')) ? `<a href="${n.fileData}" download="${n.fileName}" class="btn-sm" style="margin-top: 8px;"><i class="fa-solid fa-paperclip"></i> ${escapeHTML(n.fileName)}</a>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function deleteNote(id) {
+      if (confirm("Delete this note?")) await db.collection("keep_notes").doc(id).delete();
+    }
+
+    function escapeHTML(str) {
+      return String(str || '').replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    // INIT
     window.addEventListener("load", () => {
+      setTheme(localStorage.getItem("user_theme") || "light");
       const hash = window.location.hash;
       if (hash && document.getElementById(hash.substring(1))) {
-        const link = document.querySelector(`.nav-links a[href="${hash}"]`);
-        if (link) link.click();
+        navigateTo(hash.substring(1));
+      } else {
+        navigateTo("Home");
       }
     });
   </script>
