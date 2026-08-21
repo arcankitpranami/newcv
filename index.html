@@ -1,1402 +1,999 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Resume | Ankit Kumar</title>
-
-    <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&family=Roboto:400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-    <style>
-        :root {
-            --bg-body: #ffffff;
-            --sidebar-bg: #ffffff;
-            --sidebar-border: #eeeeee;
-            --text-main: #111111;
-            --text-muted: rgba(0, 0, 0, 0.65);
-            --text-light: #777777;
-            --card-bg: #ffffff;
-            --border-color: #eeeeee;
-            --primary: #2563eb;
-            --primary-inv: #ffffff;
-            --input-bg: #ffffff;
-            --badge-bg: #ef4444;
-            --overlay-bg: rgba(0, 0, 0, 0.5);
-        }
-
-        [data-theme="dark"] {
-            --bg-body: #0b0f19;
-            --sidebar-bg: #111827;
-            --sidebar-border: #1f2937;
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --text-light: #6b7280;
-            --card-bg: #1f2937;
-            --border-color: #374151;
-            --primary: #6366f1;
-            --primary-inv: #ffffff;
-            --input-bg: #1f2937;
-            --badge-bg: #ef4444;
-            --overlay-bg: rgba(0, 0, 0, 0.7);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            font-family: "Quicksand", Arial, sans-serif;
-            color: var(--text-muted);
-            background: var(--bg-body);
-            transition: background 0.3s ease, color 0.3s ease;
-            overflow: hidden;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ul, li {
-            list-style: none;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        p {
-            line-height: 1.8;
-            margin-bottom: 16px;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--text-main);
-            font-family: "Quicksand", Arial, sans-serif;
-            font-weight: 600;
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        .container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            position: relative;
-        }
-
-        /* MOBILE TOP BAR */
-        .mobile-header {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: var(--sidebar-bg);
-            border-bottom: 1px solid var(--sidebar-border);
-            padding: 0 20px;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 100;
-        }
-
-        .mobile-logo a img {
-            max-height: 38px;
-            object-fit: contain;
-        }
-
-        .mobile-menu-toggle {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* SIDEBAR */
-        .left-content {
-            width: 320px;
-            min-width: 320px;
-            height: 100vh;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--sidebar-border);
-            padding: 25px 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            z-index: 150;
-            overflow-y: auto;
-            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .sidebar-backdrop {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--overlay-bg);
-            z-index: 140;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .logo {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 25px; /* Logo thoda neeche kiya */
-            margin-bottom: 15px;
-        }
-
-        .logo a {
-            width: 160px;
-            height: 65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo a img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        [data-theme="dark"] .logo a img,
-        [data-theme="dark"] .mobile-logo a img {
-            filter: invert(1) brightness(2);
-        }
-
-        .nav {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            width: 100%;
-        }
-
-        .nav ul {
-            width: 100%;
-        }
-
-        .nav ul li {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 6px;
-        }
-
-        .nav ul li a {
-            position: relative;
-            padding: 6px 0;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav ul li a i {
-            font-size: 14px;
-            width: 16px;
-            text-align: center;
-        }
-
-        .nav ul li a:hover,
-        .nav ul li a.active {
-            color: var(--text-main);
-            transform: translateX(-4px);
-        }
-
-        .nav ul li a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 2px;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: 0.2s ease;
-        }
-
-        .nav ul li a:hover::after,
-        .nav ul li a.active::after {
-            width: 100%;
-        }
-
-        .sidebar-badge {
-            background: var(--badge-bg);
-            color: #ffffff;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 50px;
-            font-weight: 700;
-            margin-left: 4px;
-        }
-
-        /* SIDEBAR FOOTER (Shifted Upwards) */
-        .left-footer {
-            text-align: right;
-            margin-top: 5px; /* Spacing kam ki */
-        }
-
-        .sidebar-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 6px; /* Spacing tight ki */
-            margin-bottom: 8px; /* Neeche ke content ko upper laya */
-        }
-
-        .theme-btn, .auth-btn {
-            width: 100%;
-            padding: 7px 12px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-main);
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: 0.2s ease;
-        }
-
-        .theme-btn:hover, .auth-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .social-icons ul {
-            display: flex;
-            justify-content: flex-end;
-            gap: 4px;
-        }
-
-        .social-icons ul li a {
-            padding: 3px;
-            font-size: 15px;
-            display: block;
-            color: var(--text-muted);
-            transition: 0.2s ease;
-        }
-
-        .social-icons ul li a:hover {
-            color: var(--text-main);
-            transform: translateY(-2px);
-        }
-
-        .foot-contact {
-            margin: 4px 0 6px 0; /* Gap kam kiya */
-        }
-
-        .foot-contact li {
-            margin: 2px 0;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .copy-rights {
-            font-size: 10px;
-            color: var(--text-light);
-        }
-
-        /* MAIN CONTENT */
-        .main-content {
-            flex: 1;
-            width: calc(100% - 320px);
-            height: 100vh;
-            background: var(--bg-body);
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-
-        .cv-section {
-            width: 100%;
-            height: 100%;
-            padding: 40px 60px;
-            display: none;
-            overflow-y: auto;
-            opacity: 0;
-            box-sizing: border-box;
-        }
-
-        .cv-section.active-section {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            animation: pageShow 0.35s ease forwards;
-        }
-
-        @keyframes pageShow {
-            0% {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section-inner {
-            width: 100%;
-            max-width: 950px;
-            margin: auto;
-            padding: 20px 0;
-        }
-
-        .sec-title {
-            width: 100%;
-            margin-bottom: 25px;
-        }
-
-        .pg-sub-title {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-light);
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-
-        .pg-title {
-            color: var(--text-main);
-            font-size: 22px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        /* HOME */
-        .home-wrapper {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .user-img {
-            flex: 1;
-            max-width: 380px;
-        }
-
-        .user-img img {
-            width: 100%;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
-
-        .user-profile {
-            flex: 1.2;
-        }
-
-        .sm-text {
-            color: var(--text-main);
-            font-family: "Roboto", Arial, sans-serif;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .name {
-            margin: 10px 0 6px;
-            color: var(--text-main);
-            font-family: "Roboto", Arial, sans-serif;
-            font-size: 34px;
-            font-weight: 700;
-            line-height: 1.2;
-            text-transform: uppercase;
-        }
-
-        .role {
-            margin-bottom: 14px;
-            color: var(--primary);
-            font-family: "Roboto", Arial, sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .text {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        .pr-list {
-            margin: 18px 0;
-        }
-
-        .pr-list li {
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-        }
-
-        .pr-list li i {
-            width: 22px;
-            color: var(--primary);
-        }
-
-        .social-icons-head ul {
-            display: flex;
-            gap: 12px;
-        }
-
-        .social-icons-head ul li a {
-            font-size: 20px;
-            color: var(--text-light);
-            transition: 0.2s ease;
-        }
-
-        .social-icons-head ul li a:hover {
-            color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* ABOUT */
-        .strength-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .strength-list li i {
-            width: 24px;
-            color: #10b981;
-        }
-
-        /* SKILLS */
-        .skills {
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .skill {
-            margin-bottom: 14px;
-        }
-
-        .skill-name {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            color: var(--text-main);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .skill-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--border-color);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .skill-progress {
-            height: 100%;
-            background: var(--primary);
-            width: 0;
-            transition: width 1s ease;
-        }
-
-        .active-section .html { width: 90%; background-color: #2ed573; }
-        .active-section .css { width: 85%; background-color: #8854d0; }
-        .active-section .javascript { width: 70%; background-color: #00b4d8; }
-        .active-section .photoshop { width: 80%; background-color: #0066cc; }
-        .active-section .wordpress { width: 80%; background-color: #00a8ff; }
-        .active-section .tally { width: 65%; background-color: #2c7a9c; }
-
-        /* PORTFOLIO */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .project {
-            padding: 24px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            border-radius: 8px;
-            transition: 0.2s ease;
-        }
-
-        .project:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        .project i {
-            margin-bottom: 12px;
-            font-size: 26px;
-            color: var(--primary);
-        }
-
-        .project h3 {
-            margin-bottom: 8px;
-            font-size: 18px;
-        }
-
-        .project p {
-            margin-bottom: 0;
-            color: var(--text-light);
-            font-size: 13px;
-        }
-
-        /* EDUCATION */
-        .timeline {
-            width: 100%;
-        }
-
-        .timeline-item {
-            margin-bottom: 22px;
-            padding: 0 0 20px 22px;
-            border-left: 2px solid var(--primary);
-        }
-
-        .timeline-item span {
-            color: var(--text-light);
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-
-        .timeline-item h3 {
-            margin: 6px 0;
-            font-size: 18px;
-        }
-
-        .timeline-item p {
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 0;
-        }
-
-        /* FORMS */
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: var(--text-main);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            background: var(--input-bg);
-            color: var(--text-main);
-            border-radius: 6px;
-            font-size: 13px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--primary);
-        }
-
-        .btn-submit {
-            background: var(--primary);
-            color: var(--primary-inv);
-            border: none;
-            padding: 10px 22px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .btn-submit:hover {
-            opacity: 0.9;
-        }
-
-        .alert-success {
-            display: none;
-            padding: 10px;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid #10b981;
-            color: #10b981;
-            font-size: 13px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        /* ADMIN & KEEP NOTES */
-        .admin-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .inquiry-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 14px;
-        }
-
-        .inquiry-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .inquiry-card-header h4 {
-            font-size: 15px;
-        }
-
-        .inquiry-meta {
-            font-size: 12px;
-            color: var(--text-light);
-            margin-bottom: 10px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .inquiry-msg {
-            background: var(--bg-body);
-            border: 1px solid var(--border-color);
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: var(--text-main);
-            margin-bottom: 10px;
-        }
-
-        .inquiry-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-action-sm {
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-main);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s ease;
-        }
-
-        .btn-action-sm:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-del {
-            color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-del:hover {
-            background: #ef4444;
-            color: #ffffff;
-            border-color: #ef4444;
-        }
-
-        .notes-form-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-
-        .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            width: 100%;
-        }
-
-        .note-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-top: 3px solid var(--primary);
-            border-radius: 8px;
-            padding: 16px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .note-item h4 {
-            font-size: 15px;
-            margin-bottom: 4px;
-            padding-right: 25px;
-        }
-
-        .note-item p {
-            font-size: 13px;
-            color: var(--text-muted);
-            white-space: pre-wrap;
-            margin-bottom: 10px;
-        }
-
-        .note-item img {
-            border-radius: 6px;
-            margin-top: 8px;
-            max-height: 180px;
-            object-fit: cover;
-            width: 100%;
-        }
-
-        .note-file-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--primary);
-            margin-top: 8px;
-            text-decoration: underline;
-        }
-
-        .btn-del-note {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* MODAL */
-        #loginModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.65);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-box {
-            background: var(--sidebar-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 24px;
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .modal-box h3 {
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-
-        .modal-box p {
-            font-size: 12px;
-            color: var(--text-light);
-            margin-bottom: 14px;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 1024px) {
-            .left-content {
-                width: 270px;
-                min-width: 270px;
-                padding: 20px;
-            }
-            .main-content {
-                width: calc(100% - 270px);
-            }
-            .cv-section {
-                padding: 30px;
-            }
-            .home-wrapper {
-                gap: 30px;
-            }
-            .name {
-                font-size: 28px;
-            }
-        }
-
-        @media (max-width: 820px) {
-            body {
-                overflow: auto;
-            }
-            .mobile-header {
-                display: flex;
-            }
-            .container {
-                height: auto;
-                min-height: 100vh;
-                display: block;
-                padding-top: 60px;
-            }
-
-            .left-content {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 280px;
-                min-width: 280px;
-                height: 100vh;
-                transform: translateX(-100%);
-                box-shadow: 5px 0 25px rgba(0, 0, 0, 0.2);
-            }
-
-            .left-content.open {
-                transform: translateX(0);
-            }
-
-            .sidebar-backdrop.active {
-                display: block;
-                opacity: 1;
-            }
-
-            .main-content {
-                width: 100%;
-                height: auto;
-                min-height: calc(100vh - 60px);
-                overflow: visible;
-            }
-
-            .cv-section {
-                height: auto;
-                overflow: visible;
-                padding: 30px 20px;
-            }
-
-            .cv-section.active-section {
-                display: block;
-            }
-
-            .home-wrapper {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 25px;
-            }
-
-            .user-img {
-                max-width: 100%;
-                width: 100%;
-            }
-
-            .portfolio-grid, .notes-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ankit Kumar - Resume & Portfolio</title>
+  
+  <!-- Font Awesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      --bg-body: #ffffff;
+      --sidebar-bg: #ffffff;
+      --sidebar-border: #f0f0f0;
+      --text-main: #111111;
+      --text-muted: #666666;
+      --text-light: #999999;
+      --card-bg: #fafafa;
+      --border-color: #eeeeee;
+      --primary: #111111;
+      --primary-inv: #ffffff;
+      --input-bg: #ffffff;
+      --badge-bg: #ef4444;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0f1117;
+      --sidebar-bg: #161922;
+      --sidebar-border: #232733;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-light: #6b7280;
+      --card-bg: #1f2430;
+      --border-color: #2e3444;
+      --primary: #ffffff;
+      --primary-inv: #111111;
+      --input-bg: #1a1e29;
+      --badge-bg: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-muted);
+      display: flex;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 280px;
+      min-height: 100vh;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 40px 35px 30px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .brand-box {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 22px;
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 2px;
+      line-height: 1.3;
+      align-self: flex-start;
+      margin-left: -35px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-links {
+      list-style: none;
+      text-align: right;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .nav-links li {
+      margin: 14px 0;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.25s, transform 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      right: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--text-main);
+    }
+
+    .sidebar-badge {
+      background-color: var(--badge-bg);
+      color: #ffffff;
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .sidebar-footer {
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-light);
+      width: 100%;
+    }
+
+    .sidebar-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+      align-items: flex-end;
+    }
+
+    .btn-side {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
+
+    .btn-side:hover {
+      color: var(--text-main);
+      border-color: var(--text-main);
+    }
+
+    .social-icons {
+      margin-bottom: 12px;
+    }
+
+    .social-icons a {
+      color: var(--text-muted);
+      margin-left: 12px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .social-icons a:hover {
+      color: var(--text-main);
+      transform: translateY(-2px);
+    }
+
+    .sidebar-footer p {
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cv-section {
+      display: none;
+      width: 100%;
+      max-width: 900px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .cv-section.active-section {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-main);
+      margin-bottom: 45px;
+    }
+
+    .page-title span {
+      display: block;
+      font-size: 10px;
+      color: var(--text-light);
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    /* 1. Home Profile Grid */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .profile-image-container {
+      width: 100%;
+      height: 390px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .profile-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-details {
+      max-width: 520px;
+    }
+
+    .greeting {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .profile-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+
+    .job-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .bio {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 25px;
+    }
+
+    .contact-info {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+
+    .contact-info li {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-info li i {
+      font-size: 13px;
+      width: 18px;
+      color: var(--text-main);
+    }
+
+    /* Strengths & Skills */
+    .strength-list {
+      list-style: none;
+      margin-top: 15px;
+    }
+
+    .strength-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .strength-list li i {
+      color: #10b981;
+    }
+
+    .skill-item {
+      margin-bottom: 16px;
+    }
+
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .skill-bar {
+      width: 100%;
+      height: 6px;
+      background-color: var(--border-color);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background-color: var(--text-main);
+    }
+
+    /* Portfolio Grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .project-card {
+      padding: 24px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--text-main);
+    }
+
+    .project-card i {
+      font-size: 24px;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .project-card h3 {
+      font-size: 16px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .project-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Timeline */
+    .timeline {
+      border-left: 2px solid var(--text-main);
+      padding-left: 20px;
+      margin-left: 10px;
+    }
+
+    .timeline-item {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      background-color: var(--bg-body);
+      border: 2px solid var(--text-main);
+      border-radius: 50%;
+    }
+
+    .timeline-item span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-light);
+    }
+
+    .timeline-item h3 {
+      font-size: 16px;
+      color: var(--text-main);
+      margin: 4px 0;
+    }
+
+    .timeline-item p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-bg);
+      color: var(--text-main);
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--text-main);
+    }
+
+    .btn-main {
+      background-color: var(--text-main);
+      color: var(--bg-body);
+      border: none;
+      padding: 12px 26px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-main:hover {
+      opacity: 0.85;
+    }
+
+    .alert-success {
+      display: none;
+      padding: 12px;
+      background-color: rgba(16, 185, 129, 0.1);
+      border: 1px solid #10b981;
+      color: #10b981;
+      font-size: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    /* Admin Inbox & Notes */
+    .admin-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .inquiry-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--text-main);
+      padding: 16px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .inquiry-card h4 {
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .inquiry-meta {
+      font-size: 11px;
+      color: var(--text-light);
+      display: flex;
+      gap: 15px;
+      margin: 6px 0 10px;
+    }
+
+    .inquiry-msg {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg-body);
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 3px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-del {
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--text-main);
+      padding: 16px;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .note-card h4 {
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      padding-right: 25px;
+    }
+
+    .note-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      margin-top: 6px;
+    }
+
+    .note-card img {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 10px;
+      max-height: 160px;
+      object-fit: cover;
+    }
+
+    .del-note-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    #authModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border-color);
+      padding: 30px;
+      border-radius: 6px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--sidebar-border);
+        align-items: center;
+        padding: 25px 20px;
+      }
+
+      .brand-box {
+        margin-left: 0;
+        margin-bottom: 15px;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+      }
+
+      .nav-links li {
+        margin: 0;
+      }
+
+      .sidebar-footer {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .sidebar-actions {
+        align-items: center;
+      }
+
+      .main-content {
+        padding: 40px 20px;
+      }
+
+      .profile-grid, .portfolio-grid, .notes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-image-container {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- MOBILE TOP BAR -->
-<header class="mobile-header">
-    <div class="mobile-logo">
-        <a href="#Home">
-            <img src="https://lh3.googleusercontent.com/d/1k_EYNpNOfQK0C92wDTDGeyLy69zVL5LI" alt="Logo" referrerpolicy="no-referrer">
-        </a>
-    </div>
-    <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Navigation">
-        <i class="fa fa-bars" id="toggleIcon"></i>
-    </button>
-</header>
-
-<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-
-<div class="container">
-    <!-- SIDEBAR -->
-    <aside class="left-content" id="sidebar">
-        <div class="logo">
-            <a href="#Home">
-                <img src="https://lh3.googleusercontent.com/d/1k_EYNpNOfQK0C92wDTDGeyLy69zVL5LI" alt="Logo" referrerpolicy="no-referrer">
-            </a>
-        </div>
-
-        <nav class="nav">
-            <ul>
-                <li><a href="#Home" class="active"><i class="fa fa-home"></i> Home</a></li>
-                <li><a href="#About"><i class="fa fa-user"></i> About</a></li>
-                <li><a href="#Work"><i class="fa fa-briefcase"></i> Work Profile</a></li>
-                <li><a href="#Portfolio"><i class="fa fa-th-large"></i> Portfolio</a></li>
-                <li><a href="#Education"><i class="fa fa-graduation-cap"></i> Education</a></li>
-                <li><a href="#Contact"><i class="fa fa-envelope"></i> Contact</a></li>
-                
-                <li id="adminNavTab" style="display: none;">
-                    <a href="#Admin" style="color: var(--primary);">
-                        <i class="fa fa-inbox"></i> Inbox <span class="sidebar-badge" id="inboxBadge">0</span>
-                    </a>
-                </li>
-                <li id="notesNavTab" style="display: none;">
-                    <a href="#Notes" style="color: var(--primary);">
-                        <i class="fa fa-sticky-note"></i> Keep Notes <span class="sidebar-badge" id="notesBadge">0</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="left-footer">
-            <div class="sidebar-actions">
-                <button class="theme-btn" id="themeToggle">
-                    <span id="themeLabel">Dark Theme</span>
-                    <i class="fa fa-moon-o" id="themeIcon"></i>
-                </button>
-                <button class="auth-btn" id="authBtn" onclick="handleAuthClick()">
-                    <span id="authLabel">Admin Access</span>
-                    <i class="fa fa-lock" id="authIcon"></i>
-                </button>
-            </div>
-
-            <div class="social-icons">
-                <ul>
-                    <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                </ul>
-            </div>
-
-            <div class="foot-contact">
-                <ul>
-                    <li>ankitpranami001@gmail.com</li>
-                    <li>+9187**9907**</li>
-                </ul>
-            </div>
-
-            <div class="copy-rights">
-                Copyright © 2026 All rights reserved
-            </div>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-
-        <!-- 1. HOME -->
-        <section id="Home" class="cv-section active-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">HOME</div>
-                    <div class="pg-title">MY PROFILE</div>
-                </div>
-
-                <div class="home-wrapper">
-                    <div class="user-img">
-                        <img src="https://lh3.googleusercontent.com/d/1uB2Y1hpD11uwL3v9HO0trw8r0PpoKCsb" alt="Ankit Kumar" referrerpolicy="no-referrer">
-                    </div>
-
-                    <div class="user-profile">
-                        <div class="sm-text">HELLO EVERYBODY, I AM</div>
-                        <div class="name">ANKIT KUMAR</div>
-                        <div class="role">FRONTEND DEVELOPER</div>
-                        <div class="text">
-                            I am a passionate Frontend Developer who creates modern, responsive and user-friendly websites. I work with HTML, CSS, JavaScript, Photoshop and WordPress.
-                        </div>
-
-                        <div class="pr-list">
-                            <ul>
-                                <li><i class="fa fa-phone"></i> +9187**9907**</li>
-                                <li><i class="fa fa-envelope"></i> arcankitpranami@gmail.com</li>
-                                <li><i class="fa fa-map-marker"></i> India</li>
-                            </ul>
-                        </div>
-
-                        <div class="social-icons-head">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. ABOUT -->
-        <section id="About" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">ABOUT</div>
-                    <div class="pg-title">ABOUT ME</div>
-                </div>
-
-                <div class="about-content">
-                    <h2>Hello, I'm Ankit Kumar</h2>
-                    <p>I am a passionate Frontend Developer interested in creating modern, clean and responsive websites.</p>
-                    <p>I create attractive user interfaces using HTML, CSS and JavaScript.</p>
-                    <p>I also work with Photoshop, WordPress and Elementor for website design and development.</p>
-
-                    <h3 style="margin: 24px 0 12px;">My Strengths</h3>
-                    <ul class="strength-list">
-                        <li><i class="fa fa-check"></i> Responsive Web Design</li>
-                        <li><i class="fa fa-check"></i> HTML & CSS</li>
-                        <li><i class="fa fa-check"></i> JavaScript</li>
-                        <li><i class="fa fa-check"></i> Photoshop</li>
-                        <li><i class="fa fa-check"></i> WordPress & Elementor</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. WORK PROFILE -->
-        <section id="Work" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">WORK PROFILE</div>
-                    <div class="pg-title">MY SKILLS</div>
-                </div>
-
-                <div class="work-content">
-                    <h2>Frontend Developer</h2>
-                    <p>I create responsive websites, landing pages and modern user interfaces.</p>
-
-                    <h3 style="margin: 24px 0 14px;">Technical Skills</h3>
-                    <div class="skills">
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>Wordpress</span>
-                                <span>80%</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-progress wordpress"></div></div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>HTML</span>
-                                <span>90%</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-progress html"></div></div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>CSS</span>
-                                <span>85%</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-progress css"></div></div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>JavaScript</span>
-                                <span>70%</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-progress javascript"></div></div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>Photoshop</span>
-                                <span>80%</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-progress photoshop"></div></div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>Tally erp9</span>
-                                <span>65%</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-progress tally"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. PORTFOLIO -->
-        <section id="Portfolio" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">PORTFOLIO</div>
-                    <div class="pg-title">MY PROJECTS</div>
-                </div>
-
-                <div class="portfolio-grid">
-                    <div class="project">
-                        <i class="fa fa-laptop"></i>
-                        <h3>Portfolio Website</h3>
-                        <p>A responsive personal portfolio website created using HTML, CSS and JavaScript.</p>
-                    </div>
-                    <div class="project">
-                        <i class="fa fa-shopping-cart"></i>
-                        <h3>E-Commerce Website</h3>
-                        <p>A modern e-commerce website with responsive design and user-friendly interface.</p>
-                    </div>
-                    <div class="project">
-                        <i class="fa fa-wordpress"></i>
-                        <h3>WordPress Website</h3>
-                        <p>WordPress websites designed and customized using Elementor.</p>
-                    </div>
-                    <div class="project">
-                        <i class="fa fa-code"></i>
-                        <h3>Frontend Projects</h3>
-                        <p>Various HTML, CSS and JavaScript projects and landing pages.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. EDUCATION -->
-        <section id="Education" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">EDUCATION</div>
-                    <div class="pg-title">MY EDUCATION</div>
-                </div>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <span>EDUCATION</span>
-                        <h3>Academic Qualification</h3>
-                        <p>Higher Secondary / Graduation Details.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span>PROFESSIONAL</span>
-                        <h3>Web Development</h3>
-                        <p>Learning and working with HTML, CSS, JavaScript, WordPress and modern web technologies.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span>CURRENT LEARNING</span>
-                        <h3>Frontend Development</h3>
-                        <p>Continuously improving frontend development and responsive design skills.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. CONTACT FORM -->
-        <section id="Contact" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">CONTACT</div>
-                    <div class="pg-title">CONTACT ME</div>
-                </div>
-
-                <div class="contact-content">
-                    <h2>Let's Work Together</h2>
-                    <p>If you have a project or website idea, feel free to submit the form below.</p>
-
-                    <div id="contactSuccessAlert" class="alert-success">
-                        <i class="fa fa-check-circle"></i> Thank you! Message sent and saved to Cloud Database.
-                    </div>
-
-                    <form id="cvContactForm">
-                        <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" id="formName" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address *</label>
-                            <input type="email" id="formEmail" placeholder="yourname@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number (Optional)</label>
-                            <input type="tel" id="formPhone" placeholder="+91 9876543210">
-                        </div>
-                        <div class="form-group">
-                            <label>Message *</label>
-                            <textarea id="formMessage" rows="4" placeholder="Your project requirements..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn-submit">
-                            <i class="fa fa-paper-plane"></i> Send Message
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. ADMIN INBOX -->
-        <section id="Admin" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">CONTROL CENTER</div>
-                    <div class="pg-title">CLIENT INBOX</div>
-                </div>
-
-                <div class="admin-content">
-                    <div class="admin-top-bar">
-                        <h3><i class="fa fa-inbox"></i> Responses (<span id="inquiryCount">0</span>)</h3>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn-action-sm" onclick="exportToCSV()">
-                                <i class="fa fa-file-excel-o"></i> Export CSV
-                            </button>
-                            <button class="btn-action-sm btn-del" onclick="clearAllMessages()">
-                                <i class="fa fa-trash"></i> Clear All
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="inboxListContainer"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 8. KEEP NOTES SECTION -->
-        <section id="Notes" class="cv-section">
-            <div class="section-inner">
-                <div class="sec-title">
-                    <div class="pg-sub-title">ADMIN TOOLS</div>
-                    <div class="pg-title">KEEP NOTES & PAGES</div>
-                </div>
-
-                <div class="admin-content">
-                    <div class="notes-form-card">
-                        <h4 style="margin-bottom: 12px; color: var(--text-main);"><i class="fa fa-pencil-square-o"></i> Create New Note / Page</h4>
-                        <div class="form-group">
-                            <input type="text" id="noteTitle" placeholder="Page / Note Title...">
-                        </div>
-                        <div class="form-group">
-                            <textarea id="noteContent" rows="4" placeholder="Type your notes, links, or details here..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 11px;"><i class="fa fa-paperclip"></i> Attach Image or File (Photo/PDF/Doc):</label>
-                            <input type="file" id="noteFile" accept="image/*,.pdf,.doc,.docx,.txt" style="padding: 6px;">
-                        </div>
-                        <button class="btn-submit" id="saveNoteBtn" onclick="saveAdminNote()">
-                            <i class="fa fa-plus-circle"></i> Save Note
-                        </button>
-                    </div>
-
-                    <div class="admin-top-bar">
-                        <h3><i class="fa fa-sticky-note-o"></i> Cloud Notes (<span id="notesCountDisplay">0</span>)</h3>
-                    </div>
-                    <div class="notes-grid" id="notesListContainer"></div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-</div>
-
-<!-- SECURE AUTH MODAL -->
-<div id="loginModal">
-    <div class="modal-box" id="loginBox">
-        <h3>Secure Admin Login</h3>
-        <p>Google Firebase Cloud Authentication</p>
-        <div class="form-group">
-            <input type="email" id="adminEmailInput" placeholder="Admin Email" style="text-align: center;" required>
-        </div>
-        <div class="form-group">
-            <input type="password" id="adminPassInput" placeholder="Password" style="text-align: center;" required>
-        </div>
-        <div style="display: flex; gap: 8px; margin-top: 10px;">
-            <button class="btn-submit" id="loginSubmitBtn" onclick="attemptLogin()" style="flex: 1;"><i class="fa fa-sign-in"></i> Login</button>
-            <button class="btn-action-sm" onclick="closeLoginModal()" style="flex: 1; justify-content: center;"><i class="fa fa-times"></i> Cancel</button>
-        </div>
-        <div style="margin-top: 12px;">
-            <a href="javascript:void(0)" onclick="showForgotView()" style="font-size: 11px; color: var(--primary); text-decoration: underline;">
-                <i class="fa fa-key"></i> Forgot Password?
-            </a>
-        </div>
-        <p id="loginError" style="color: #ef4444; font-size: 11px; margin-top: 10px; display: none;"></p>
+  <!-- Left Sidebar -->
+  <aside class="sidebar">
+    <div class="brand-box">
+      MY<br>RESUME
     </div>
 
-    <div class="modal-box" id="resetBox" style="display: none;">
-        <h3>Reset Password</h3>
-        <p>A secure reset link will be sent to your email</p>
-        <div class="form-group">
-            <input type="email" id="resetEmailInput" placeholder="Enter your registered email" style="text-align: center;">
-        </div>
-        <div style="display: flex; gap: 8px; margin-top: 10px;">
-            <button class="btn-submit" onclick="handleSendPasswordReset()" style="flex: 1;"><i class="fa fa-paper-plane"></i> Send Link</button>
-            <button class="btn-action-sm" onclick="backToLoginView()" style="flex: 1; justify-content: center;"><i class="fa fa-arrow-left"></i> Back</button>
-        </div>
-        <p id="resetError" style="color: #ef4444; font-size: 11px; margin-top: 10px; display: none;"></p>
-        <p id="resetSuccess" style="color: #10b981; font-size: 11px; margin-top: 10px; display: none;">Reset email sent! Please check your inbox.</p>
-    </div>
-</div>
+    <ul class="nav-links">
+      <li><a href="#Home" class="active">HOME</a></li>
+      <li><a href="#About">ABOUT</a></li>
+      <li><a href="#Work">WORK PROFILE</a></li>
+      <li><a href="#Portfolio">PORTFOLIO</a></li>
+      <li><a href="#Education">EDUCATION</a></li>
+      <li><a href="#Contact">CONTACT</a></li>
+      <li id="adminNav" style="display: none;"><a href="#Admin">INBOX <span class="sidebar-badge" id="inboxBadge">0</span></a></li>
+      <li id="notesNav" style="display: none;"><a href="#Notes">NOTES <span class="sidebar-badge" id="notesBadge">0</span></a></li>
+    </ul>
 
-<script>
-    // 1. FIREBASE INITIALIZATION
+    <div class="sidebar-footer">
+      <div class="sidebar-actions">
+        <button class="btn-side" id="themeBtn">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+          <span id="themeLabel">Dark Mode</span>
+        </button>
+        <button class="btn-side" id="authSideBtn" onclick="handleAuthClick()">
+          <i class="fa-solid fa-lock" id="authIcon"></i>
+          <span id="authLabel">Admin Access</span>
+        </button>
+      </div>
+
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p>arcankitpranami@gmail.com</p>
+      <p>+9187***9907*</p>
+      <p style="margin-top: 8px;">Copyright © 2026 All rights reserved</p>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- 1. HOME -->
+    <section id="Home" class="cv-section active-section">
+      <div class="page-title">
+        <span>HOME</span>
+        MY PROFILE
+      </div>
+      <div class="profile-grid">
+        <div class="profile-image-container">
+          <img src="https://lh3.googleusercontent.com/d/1uB2Y1hpD11uwL3v9HO0trw8r0PpoKCsb" alt="Ankit Kumar" referrerpolicy="no-referrer">
+        </div>
+        <div class="profile-details">
+          <p class="greeting">HELLO EVERYBODY, I AM</p>
+          <h1 class="profile-name">ANKIT KUMAR</h1>
+          <h3 class="job-title">FRONTEND DEVELOPER</h3>
+          <p class="bio">
+            I am a passionate Frontend Developer who creates modern, responsive and user-friendly websites. I work with HTML, CSS, JavaScript, Photoshop and WordPress.
+          </p>
+          <ul class="contact-info">
+            <li><i class="fa-solid fa-phone"></i> +9187**9907**</li>
+            <li><i class="fa-solid fa-envelope"></i> arcankitpranami@gmail.com</li>
+            <li><i class="fa-solid fa-location-dot"></i> India</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ABOUT -->
+    <section id="About" class="cv-section">
+      <div class="page-title">
+        <span>ABOUT</span>
+        ABOUT ME
+      </div>
+      <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 12px;">Hello, I'm Ankit Kumar</h2>
+      <p class="bio">I am a passionate Frontend Developer interested in creating modern, clean and responsive websites. I create attractive user interfaces using HTML, CSS, JavaScript, and Elementor.</p>
+      
+      <h3 style="font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-main); margin: 25px 0 10px;">My Strengths</h3>
+      <ul class="strength-list">
+        <li><i class="fa-solid fa-circle-check"></i> Responsive Web Design</li>
+        <li><i class="fa-solid fa-circle-check"></i> HTML & CSS Mastery</li>
+        <li><i class="fa-solid fa-circle-check"></i> JavaScript Logic & Interactivity</li>
+        <li><i class="fa-solid fa-circle-check"></i> UI/UX Design with Photoshop</li>
+        <li><i class="fa-solid fa-circle-check"></i> WordPress & Elementor CMS</li>
+      </ul>
+    </section>
+
+    <!-- 3. WORK PROFILE -->
+    <section id="Work" class="cv-section">
+      <div class="page-title">
+        <span>WORK PROFILE</span>
+        TECHNICAL SKILLS
+      </div>
+      <div class="skills-container">
+        <div class="skill-item">
+          <div class="skill-info"><span>HTML</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>CSS</span><span>85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>WordPress</span><span>80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>Photoshop</span><span>80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>JavaScript</span><span>70%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width: 70%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>Tally ERP 9</span><span>65%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width: 65%;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PORTFOLIO -->
+    <section id="Portfolio" class="cv-section">
+      <div class="page-title">
+        <span>PORTFOLIO</span>
+        FEATURED PROJECTS
+      </div>
+      <div class="portfolio-grid">
+        <div class="project-card">
+          <i class="fa-solid fa-laptop-code"></i>
+          <h3>Portfolio Website</h3>
+          <p>A responsive personal portfolio website created using semantic HTML, modern CSS and JavaScript.</p>
+        </div>
+        <div class="project-card">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <h3>E-Commerce Website</h3>
+          <p>Modern online store mockup featuring clean UI and interactive product catalog components.</p>
+        </div>
+        <div class="project-card">
+          <i class="fa-brands fa-wordpress-simple"></i>
+          <h3>WordPress Projects</h3>
+          <p>Dynamic custom WordPress sites designed and structured using Elementor.</p>
+        </div>
+        <div class="project-card">
+          <i class="fa-solid fa-code"></i>
+          <h3>Frontend Modules</h3>
+          <p>Interactive web apps and UI widgets engineered with clean vanilla JavaScript.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. EDUCATION -->
+    <section id="Education" class="cv-section">
+      <div class="page-title">
+        <span>EDUCATION</span>
+        MY ACADEMICS
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span>ACADEMIC BACKGROUND</span>
+          <h3>Academic Qualification</h3>
+          <p>Higher Secondary & Graduation Details.</p>
+        </div>
+        <div class="timeline-item">
+          <span>PROFESSIONAL LEARNING</span>
+          <h3>Web Development & Design</h3>
+          <p>Learned frontend technologies, UI/UX principles and modern tools.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CONTACT -->
+    <section id="Contact" class="cv-section">
+      <div class="page-title">
+        <span>CONTACT</span>
+        GET IN TOUCH
+      </div>
+      <div id="contactAlert" class="alert-success">
+        <i class="fa-solid fa-circle-check"></i> Thank you! Message submitted to Firebase database.
+      </div>
+      <form id="contactForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="cName" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="cEmail" placeholder="yourname@domain.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number (Optional)</label>
+          <input type="tel" id="cPhone" placeholder="+91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="cMsg" rows="4" placeholder="Your message or project requirements..." required></textarea>
+        </div>
+        <button type="submit" class="btn-main" id="submitBtn">
+          <i class="fa-solid fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </section>
+
+    <!-- 7. ADMIN INBOX -->
+    <section id="Admin" class="cv-section">
+      <div class="page-title">
+        <span>ADMIN</span>
+        CLIENT INBOX
+      </div>
+      <div class="admin-bar">
+        <h3 style="font-size: 14px; color: var(--text-main);">Responses (<span id="inquiryCount">0</span>)</h3>
+        <div>
+          <button class="btn-sm" onclick="exportToCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+          <button class="btn-sm btn-del" onclick="clearAllMessages()"><i class="fa-solid fa-trash"></i> Clear All</button>
+        </div>
+      </div>
+      <div id="inboxList"></div>
+    </section>
+
+    <!-- 8. KEEP NOTES -->
+    <section id="Notes" class="cv-section">
+      <div class="page-title">
+        <span>ADMIN</span>
+        KEEP NOTES
+      </div>
+      <div style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 4px; margin-bottom: 25px;">
+        <div class="form-group">
+          <input type="text" id="nTitle" placeholder="Note Title...">
+        </div>
+        <div class="form-group">
+          <textarea id="nContent" rows="3" placeholder="Note text..."></textarea>
+        </div>
+        <div class="form-group">
+          <input type="file" id="nFile" accept="image/*,.pdf,.doc,.docx" style="padding: 6px;">
+        </div>
+        <button class="btn-main" id="saveNoteBtn" onclick="saveAdminNote()">
+          <i class="fa-solid fa-plus"></i> Save Note
+        </button>
+      </div>
+      <div class="notes-grid" id="notesList"></div>
+    </section>
+
+  </main>
+
+  <!-- Login Modal -->
+  <div id="authModal">
+    <div class="modal-content">
+      <h3 style="font-size: 16px; color: var(--text-main); margin-bottom: 8px;">Firebase Admin Login</h3>
+      <p style="font-size: 12px; color: var(--text-light); margin-bottom: 18px;">Sign in to access admin tools</p>
+      
+      <div class="form-group">
+        <input type="email" id="adminEmail" placeholder="Admin Email" style="text-align: center;">
+      </div>
+      <div class="form-group">
+        <input type="password" id="adminPass" placeholder="Password" style="text-align: center;">
+      </div>
+      <p id="loginError" style="color: #ef4444; font-size: 11px; margin-bottom: 10px; display: none;"></p>
+      
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-main" style="flex: 1; justify-content: center;" id="modalLoginBtn" onclick="attemptLogin()">Login</button>
+        <button class="btn-sm" style="flex: 1; justify-content: center;" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. FIREBASE CONFIGURATION
     const firebaseConfig = {
-        apiKey: "AIzaSyBGrTsA0Q9Tj4yzazatmxinsL5AqlPyhlQ",
-        authDomain: "cv-database-6f02d.firebaseapp.com",
-        projectId: "cv-database-6f02d",
-        storageBucket: "cv-database-6f02d.firebasestorage.app",
-        messagingSenderId: "546654148018",
-        appId: "1:546654148018:web:b3997aa7299f9be3eb80ab",
-        measurementId: "G-LQJZHVPNCZV"
+      apiKey: "AIzaSyBGrTsA0Q9Tj4yzazatmxinsL5AqlPyhlQ",
+      authDomain: "cv-database-6f02d.firebaseapp.com",
+      projectId: "cv-database-6f02d",
+      storageBucket: "cv-database-6f02d.firebasestorage.app",
+      messagingSenderId: "546654148018",
+      appId: "1:546654148018:web:b3997aa7299f9be3eb80ab",
+      measurementId: "G-LQJZHVPNCZV"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -1405,440 +1002,329 @@
 
     let cachedInquiries = [];
     let cachedNotes = [];
-    let inquiriesUnsubscribe = null;
-    let notesUnsubscribe = null;
+    let unsubInquiries = null;
+    let unsubNotes = null;
 
-    // 2. THEME SETUP
-    const themeToggle = document.getElementById("themeToggle");
+    // 2. THEME SWITCHER
+    const themeBtn = document.getElementById("themeBtn");
     const themeLabel = document.getElementById("themeLabel");
     const themeIcon = document.getElementById("themeIcon");
 
-    function applyTheme(theme) {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("resume_theme", theme);
-        themeLabel.textContent = theme === "dark" ? "Light Theme" : "Dark Theme";
-        themeIcon.className = theme === "dark" ? "fa fa-sun-o" : "fa fa-moon-o";
+    function setTheme(mode) {
+      document.documentElement.setAttribute("data-theme", mode);
+      localStorage.setItem("user_theme", mode);
+      themeLabel.textContent = mode === "dark" ? "Light Mode" : "Dark Mode";
+      themeIcon.className = mode === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
     }
 
-    themeToggle.addEventListener("click", () => {
-        const current = document.documentElement.getAttribute("data-theme") || "light";
-        applyTheme(current === "dark" ? "light" : "dark");
+    themeBtn.addEventListener("click", () => {
+      const active = document.documentElement.getAttribute("data-theme") || "light";
+      setTheme(active === "dark" ? "light" : "dark");
     });
 
-    // 3. NAVIGATION & MOBILE DRAWER
-    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const toggleIcon = document.getElementById("toggleIcon");
-    const sidebar = document.getElementById("sidebar");
-    const sidebarBackdrop = document.getElementById("sidebarBackdrop");
-    const menuLinks = document.querySelectorAll(".nav a");
+    // 3. TAB NAVIGATION
+    const navLinks = document.querySelectorAll(".nav-links a");
     const sections = document.querySelectorAll(".cv-section");
 
-    function toggleMobileMenu() {
-        const isOpen = sidebar.classList.toggle("open");
-        sidebarBackdrop.classList.toggle("active", isOpen);
-        toggleIcon.className = isOpen ? "fa fa-times" : "fa fa-bars";
+    function navigateTo(id) {
+      sections.forEach(s => s.classList.remove("active-section"));
+      navLinks.forEach(l => l.classList.remove("active"));
+
+      const targetSection = document.getElementById(id);
+      const targetNav = document.querySelector(`.nav-links a[href="#${id}"]`);
+
+      if (targetSection) targetSection.classList.add("active-section");
+      if (targetNav) targetNav.classList.add("active");
     }
 
-    function closeMobileMenu() {
-        sidebar.classList.remove("open");
-        sidebarBackdrop.classList.remove("active");
-        toggleIcon.className = "fa fa-bars";
-    }
-
-    mobileMenuBtn.addEventListener("click", toggleMobileMenu);
-    sidebarBackdrop.addEventListener("click", closeMobileMenu);
-
-    function showSection(sectionId) {
-        sections.forEach(s => s.classList.remove("active-section"));
-        menuLinks.forEach(l => l.classList.remove("active"));
-
-        const selectedSection = document.getElementById(sectionId);
-        const selectedMenu = document.querySelector('.nav a[href="#' + sectionId + '"]');
-
-        if (selectedSection) selectedSection.classList.add("active-section");
-        if (selectedMenu) selectedMenu.classList.add("active");
-    }
-
-    menuLinks.forEach(link => {
-        link.addEventListener("click", function(e) {
-            e.preventDefault();
-            const sectionId = this.getAttribute("href").substring(1);
-            showSection(sectionId);
-            history.replaceState(null, null, "#" + sectionId);
-            closeMobileMenu();
-        });
+    navLinks.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        const secId = this.getAttribute("href").substring(1);
+        navigateTo(secId);
+        history.replaceState(null, null, "#" + secId);
+      });
     });
 
-    document.querySelectorAll(".logo a, .mobile-logo a").forEach(logo => {
-        logo.addEventListener("click", function(e) {
-            e.preventDefault();
-            showSection("Home");
-            history.replaceState(null, null, "#Home");
-            closeMobileMenu();
-        });
-    });
-
-    // 4. FIREBASE AUTH STATE
+    // 4. AUTHENTICATION
     auth.onAuthStateChanged(user => {
-        const adminTab = document.getElementById("adminNavTab");
-        const notesTab = document.getElementById("notesNavTab");
-        const authLabel = document.getElementById("authLabel");
-        const authIcon = document.getElementById("authIcon");
+      const adminNav = document.getElementById("adminNav");
+      const notesNav = document.getElementById("notesNav");
+      const authLabel = document.getElementById("authLabel");
+      const authIcon = document.getElementById("authIcon");
 
-        if (user) {
-            adminTab.style.display = "flex";
-            notesTab.style.display = "flex";
-            authLabel.textContent = "Logout";
-            authIcon.className = "fa fa-unlock";
-            listenToInquiries();
-            listenToNotes();
-        } else {
-            adminTab.style.display = "none";
-            notesTab.style.display = "none";
-            authLabel.textContent = "Admin Access";
-            authIcon.className = "fa fa-lock";
+      if (user) {
+        adminNav.style.display = "block";
+        notesNav.style.display = "block";
+        authLabel.textContent = "Logout";
+        authIcon.className = "fa-solid fa-unlock";
+        listenInquiries();
+        listenNotes();
+      } else {
+        adminNav.style.display = "none";
+        notesNav.style.display = "none";
+        authLabel.textContent = "Admin Access";
+        authIcon.className = "fa-solid fa-lock";
 
-            if (inquiriesUnsubscribe) inquiriesUnsubscribe();
-            if (notesUnsubscribe) notesUnsubscribe();
+        if (unsubInquiries) unsubInquiries();
+        if (unsubNotes) unsubNotes();
 
-            if (document.getElementById("Admin").classList.contains("active-section") || 
-                document.getElementById("Notes").classList.contains("active-section")) {
-                showSection("Home");
-            }
+        if (document.getElementById("Admin").classList.contains("active-section") ||
+            document.getElementById("Notes").classList.contains("active-section")) {
+          navigateTo("Home");
         }
+      }
     });
 
     function handleAuthClick() {
-        if (auth.currentUser) {
-            auth.signOut().then(closeMobileMenu);
-        } else {
-            document.getElementById("loginModal").style.display = "flex";
-            backToLoginView();
-            document.getElementById("adminEmailInput").value = "";
-            document.getElementById("adminPassInput").value = "";
-            document.getElementById("loginError").style.display = "none";
-            closeMobileMenu();
-        }
+      if (auth.currentUser) {
+        auth.signOut();
+      } else {
+        document.getElementById("authModal").style.display = "flex";
+        document.getElementById("adminEmail").value = "";
+        document.getElementById("adminPass").value = "";
+        document.getElementById("loginError").style.display = "none";
+      }
     }
 
-    function closeLoginModal() {
-        document.getElementById("loginModal").style.display = "none";
+    function closeModal() {
+      document.getElementById("authModal").style.display = "none";
     }
 
     function attemptLogin() {
-        const email = document.getElementById("adminEmailInput").value.trim();
-        const pass = document.getElementById("adminPassInput").value.trim();
-        const errBox = document.getElementById("loginError");
-        const btn = document.getElementById("loginSubmitBtn");
+      const email = document.getElementById("adminEmail").value.trim();
+      const pass = document.getElementById("adminPass").value.trim();
+      const errBox = document.getElementById("loginError");
+      const btn = document.getElementById("modalLoginBtn");
 
-        if (!email || !pass) {
-            errBox.textContent = "Please enter email and password.";
-            errBox.style.display = "block";
-            return;
-        }
+      if (!email || !pass) {
+        errBox.textContent = "Please provide email and password.";
+        errBox.style.display = "block";
+        return;
+      }
 
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Verifying...';
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-        auth.signInWithEmailAndPassword(email, pass)
-            .then(() => {
-                closeLoginModal();
-                showSection("Admin");
-            })
-            .catch(err => {
-                errBox.textContent = err.message;
-                errBox.style.display = "block";
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa fa-sign-in"></i> Login';
-            });
-    }
-
-    function showForgotView() {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("resetBox").style.display = "block";
-        document.getElementById("resetEmailInput").value = document.getElementById("adminEmailInput").value;
-        document.getElementById("resetError").style.display = "none";
-        document.getElementById("resetSuccess").style.display = "none";
-    }
-
-    function backToLoginView() {
-        document.getElementById("resetBox").style.display = "none";
-        document.getElementById("loginBox").style.display = "block";
-        document.getElementById("loginError").style.display = "none";
-    }
-
-    function handleSendPasswordReset() {
-        const email = document.getElementById("resetEmailInput").value.trim();
-        const resetError = document.getElementById("resetError");
-        const resetSuccess = document.getElementById("resetSuccess");
-
-        resetError.style.display = "none";
-        resetSuccess.style.display = "none";
-
-        if (!email) {
-            resetError.textContent = "Please enter your email address.";
-            resetError.style.display = "block";
-            return;
-        }
-
-        auth.sendPasswordResetEmail(email)
-            .then(() => {
-                resetSuccess.style.display = "block";
-                setTimeout(backToLoginView, 2500);
-            })
-            .catch(err => {
-                resetError.textContent = err.message;
-                resetError.style.display = "block";
-            });
-    }
-
-    // 5. CONTACT FORM
-    document.getElementById("cvContactForm").addEventListener("submit", async function(e) {
-        e.preventDefault();
-
-        const submitBtn = this.querySelector(".btn-submit");
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
-
-        const inquiryData = {
-            name: document.getElementById("formName").value.trim(),
-            email: document.getElementById("formEmail").value.trim(),
-            phone: document.getElementById("formPhone").value.trim() || 'Not Provided',
-            msg: document.getElementById("formMessage").value.trim(),
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
-        try {
-            await db.collection("inquiries").add(inquiryData);
-            const alertBox = document.getElementById("contactSuccessAlert");
-            alertBox.style.display = "block";
-            document.getElementById("cvContactForm").reset();
-            setTimeout(() => { alertBox.style.display = "none"; }, 4000);
-        } catch (err) {
-            alert("Database Error: " + err.message);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fa fa-paper-plane"></i> Send Message';
-        }
-    });
-
-    function listenToInquiries() {
-        inquiriesUnsubscribe = db.collection("inquiries").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-            cachedInquiries = [];
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                cachedInquiries.push({
-                    id: doc.id,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    msg: data.msg,
-                    date: data.timestamp ? data.timestamp.toDate().toLocaleString('en-GB') : "Just now"
-                });
-            });
-
-            document.getElementById("inboxBadge").textContent = cachedInquiries.length;
-            document.getElementById("inquiryCount").textContent = cachedInquiries.length;
-            renderInboxMessages();
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => {
+          closeModal();
+          navigateTo("Admin");
+        })
+        .catch(err => {
+          errBox.textContent = err.message;
+          errBox.style.display = "block";
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.innerHTML = 'Login';
         });
     }
 
-    function renderInboxMessages() {
-        const container = document.getElementById("inboxListContainer");
-        if (cachedInquiries.length === 0) {
-            container.innerHTML = `<p style="text-align: center; color: var(--text-light); padding: 30px;">No messages received in Cloud Database yet.</p>`;
-            return;
-        }
+    // 5. CONTACT FORM HANDLER
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
 
-        container.innerHTML = cachedInquiries.map(item => `
-            <div class="inquiry-card">
-                <div class="inquiry-card-header">
-                    <h4>${escapeHTML(item.name)}</h4>
-                    <span style="font-size: 11px; color: var(--text-light);">${item.date}</span>
-                </div>
-                <div class="inquiry-meta">
-                    <span><i class="fa fa-envelope"></i> ${escapeHTML(item.email)}</span>
-                    <span><i class="fa fa-phone"></i> ${escapeHTML(item.phone)}</span>
-                </div>
-                <div class="inquiry-msg">${escapeHTML(item.msg)}</div>
-                <div class="inquiry-actions">
-                    <a href="mailto:${encodeURIComponent(item.email)}?subject=Re: Inquiring about resume - Ankit Kumar" class="btn-action-sm">
-                        <i class="fa fa-reply"></i> Reply
-                    </a>
-                    <button class="btn-action-sm btn-del" onclick="deleteMessage('${item.id}')">
-                        <i class="fa fa-trash"></i> Delete
-                    </button>
-                </div>
-            </div>
-        `).join('');
+      const data = {
+        name: document.getElementById("cName").value.trim(),
+        email: document.getElementById("cEmail").value.trim(),
+        phone: document.getElementById("cPhone").value.trim() || 'Not Provided',
+        msg: document.getElementById("cMsg").value.trim(),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        await db.collection("inquiries").add(data);
+        const alert = document.getElementById("contactAlert");
+        alert.style.display = "block";
+        this.reset();
+        setTimeout(() => alert.style.display = "none", 4000);
+      } catch (err) {
+        alert("Submission Failed: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+      }
+    });
+
+    function listenInquiries() {
+      unsubInquiries = db.collection("inquiries").orderBy("timestamp", "desc").onSnapshot(snap => {
+        cachedInquiries = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          cachedInquiries.push({
+            id: doc.id,
+            name: d.name,
+            email: d.email,
+            phone: d.phone,
+            msg: d.msg,
+            date: d.timestamp ? d.timestamp.toDate().toLocaleString('en-GB') : 'Just now'
+          });
+        });
+
+        document.getElementById("inboxBadge").textContent = cachedInquiries.length;
+        document.getElementById("inquiryCount").textContent = cachedInquiries.length;
+        renderInquiries();
+      });
     }
 
-    async function deleteMessage(docId) {
-        if (confirm("Delete this message from Firebase?")) {
-            await db.collection("inquiries").doc(docId).delete();
-        }
+    function renderInquiries() {
+      const container = document.getElementById("inboxList");
+      if (!cachedInquiries.length) {
+        container.innerHTML = `<p style="color: var(--text-light); text-align: center; padding: 20px;">No messages found.</p>`;
+        return;
+      }
+
+      container.innerHTML = cachedInquiries.map(item => `
+        <div class="inquiry-card">
+          <h4>${escapeHTML(item.name)}</h4>
+          <div class="inquiry-meta">
+            <span><i class="fa-solid fa-envelope"></i> ${escapeHTML(item.email)}</span>
+            <span><i class="fa-solid fa-phone"></i> ${escapeHTML(item.phone)}</span>
+            <span>${item.date}</span>
+          </div>
+          <div class="inquiry-msg">${escapeHTML(item.msg)}</div>
+          <div style="display: flex; gap: 8px;">
+            <a href="mailto:${encodeURIComponent(item.email)}" class="btn-sm"><i class="fa-solid fa-reply"></i> Reply</a>
+            <button class="btn-sm btn-del" onclick="deleteMessage('${item.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function deleteMessage(id) {
+      if (confirm("Delete this message?")) await db.collection("inquiries").doc(id).delete();
     }
 
     async function clearAllMessages() {
-        if (confirm("Clear all responses from Cloud Database?")) {
-            const batch = db.batch();
-            const snapshot = await db.collection("inquiries").get();
-            snapshot.forEach(doc => batch.delete(doc.ref));
-            await batch.commit();
-        }
+      if (confirm("Clear all responses?")) {
+        const batch = db.batch();
+        const snap = await db.collection("inquiries").get();
+        snap.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+      }
     }
 
     function exportToCSV() {
-        if (cachedInquiries.length === 0) {
-            alert("No data available to export!");
-            return;
-        }
-
-        let csv = "data:text/csv;charset=utf-8,ID,Name,Email,Phone,Message,Date\n";
-        cachedInquiries.forEach(r => {
-            const clean = r.msg.replace(/"/g, '""').replace(/\n/g, ' ');
-            csv += `"${r.id}","${r.name}","${r.email}","${r.phone}","${clean}","${r.date}"\n`;
-        });
-
-        const link = document.createElement("a");
-        link.setAttribute("href", encodeURI(csv));
-        link.setAttribute("download", `Firebase_Responses_${new Date().toISOString().slice(0,10)}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      if (!cachedInquiries.length) return alert("No data to export.");
+      let csv = "data:text/csv;charset=utf-8,ID,Name,Email,Phone,Message,Date\n";
+      cachedInquiries.forEach(i => {
+        csv += `"${i.id}","${i.name}","${i.email}","${i.phone}","${i.msg.replace(/"/g, '""')}","${i.date}"\n`;
+      });
+      const link = document.createElement("a");
+      link.href = encodeURI(csv);
+      link.download = `Inquiries_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
-    // 6. KEEP NOTES
+    // 6. KEEP NOTES HANDLER
     async function saveAdminNote() {
-        const title = document.getElementById('noteTitle').value.trim();
-        const content = document.getElementById('noteContent').value.trim();
-        const fileInput = document.getElementById('noteFile');
-        const file = fileInput.files[0];
-        const saveBtn = document.getElementById('saveNoteBtn');
+      const title = document.getElementById("nTitle").value.trim();
+      const content = document.getElementById("nContent").value.trim();
+      const fileInput = document.getElementById("nFile");
+      const file = fileInput.files[0];
+      const btn = document.getElementById("saveNoteBtn");
 
-        if (!title && !content && !file) {
-            alert("Title, details ya file attach karein!");
-            return;
-        }
+      if (!title && !content && !file) return alert("Please fill at least one field!");
 
-        saveBtn.disabled = true;
-        saveBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                await storeNoteInFirebase(title, content, e.target.result, file.type, file.name);
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fa fa-plus-circle"></i> Save Note';
-            };
-            reader.readAsDataURL(file);
-        } else {
-            await storeNoteInFirebase(title, content, null, null, null);
-            saveBtn.disabled = false;
-            saveBtn.innerHTML = '<i class="fa fa-plus-circle"></i> Save Note';
-        }
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          await storeNote(title, content, e.target.result, file.type, file.name);
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-plus"></i> Save Note';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await storeNote(title, content, null, null, null);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-plus"></i> Save Note';
+      }
     }
 
-    async function storeNoteInFirebase(title, content, fileData, fileType, fileName) {
-        try {
-            await db.collection("keep_notes").add({
-                title: title || 'Untitled Note',
-                content: content,
-                fileData: fileData,
-                fileType: fileType,
-                fileName: fileName,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            document.getElementById('noteTitle').value = '';
-            document.getElementById('noteContent').value = '';
-            document.getElementById('noteFile').value = '';
-        } catch (err) {
-            alert("Error saving note: " + err.message);
-        }
-    }
-
-    function listenToNotes() {
-        notesUnsubscribe = db.collection("keep_notes").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-            cachedNotes = [];
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                cachedNotes.push({
-                    id: doc.id,
-                    title: data.title,
-                    content: data.content,
-                    fileData: data.fileData,
-                    fileType: data.fileType,
-                    fileName: data.fileName,
-                    date: data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-GB') : "Just now"
-                });
-            });
-
-            document.getElementById("notesBadge").textContent = cachedNotes.length;
-            const countDisplay = document.getElementById("notesCountDisplay");
-            if (countDisplay) countDisplay.textContent = cachedNotes.length;
-            renderAdminNotes();
+    async function storeNote(title, content, fileData, fileType, fileName) {
+      try {
+        await db.collection("keep_notes").add({
+          title: title || 'Untitled Note',
+          content: content,
+          fileData: fileData,
+          fileType: fileType,
+          fileName: fileName,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
+        document.getElementById("nTitle").value = '';
+        document.getElementById("nContent").value = '';
+        document.getElementById("nFile").value = '';
+      } catch (err) {
+        alert("Failed to save note: " + err.message);
+      }
     }
 
-    function renderAdminNotes() {
-        const container = document.getElementById("notesListContainer");
-        if (cachedNotes.length === 0) {
-            container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-light); padding: 30px;">No cloud notes created yet.</p>`;
-            return;
-        }
-
-        container.innerHTML = cachedNotes.map(note => {
-            let fileAttachment = '';
-            if (note.fileData) {
-                if (note.fileType && note.fileType.startsWith('image/')) {
-                    fileAttachment = `<img src="${note.fileData}" alt="Note Image">`;
-                } else {
-                    fileAttachment = `<a href="${note.fileData}" download="${note.fileName}" class="note-file-badge"><i class="fa fa-paperclip"></i> ${escapeHTML(note.fileName)}</a>`;
-                }
-            }
-
-            return `
-                <div class="note-item">
-                    <button class="btn-del-note" onclick="deleteAdminNote('${note.id}')" title="Delete Note">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                    <div>
-                        <h4>${escapeHTML(note.title)}</h4>
-                        <span style="font-size: 10px; color: var(--text-light); display: block; margin-bottom: 8px;">Created: ${note.date}</span>
-                        <p>${escapeHTML(note.content)}</p>
-                    </div>
-                    ${fileAttachment}
-                </div>
-            `;
-        }).join('');
+    function listenNotes() {
+      unsubNotes = db.collection("keep_notes").orderBy("timestamp", "desc").onSnapshot(snap => {
+        cachedNotes = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          cachedNotes.push({
+            id: doc.id,
+            title: d.title,
+            content: d.content,
+            fileData: d.fileData,
+            fileType: d.fileType,
+            fileName: d.fileName
+          });
+        });
+        document.getElementById("notesBadge").textContent = cachedNotes.length;
+        renderNotes();
+      });
     }
 
-    async function deleteAdminNote(docId) {
-        if (confirm("Delete this note from Cloud?")) {
-            await db.collection("keep_notes").doc(docId).delete();
-        }
+    function renderNotes() {
+      const container = document.getElementById("notesList");
+      if (!cachedNotes.length) {
+        container.innerHTML = `<p style="grid-column: 1/-1; color: var(--text-light); text-align: center; padding: 20px;">No notes added yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = cachedNotes.map(n => `
+        <div class="note-card">
+          <button class="del-note-btn" onclick="deleteNote('${n.id}')"><i class="fa-solid fa-trash"></i></button>
+          <h4>${escapeHTML(n.title)}</h4>
+          <p>${escapeHTML(n.content)}</p>
+          ${n.fileData && n.fileType && n.fileType.startsWith('image/') ? `<img src="${n.fileData}">` : ''}
+          ${n.fileData && (!n.fileType || !n.fileType.startsWith('image/')) ? `<a href="${n.fileData}" download="${n.fileName}" class="btn-sm" style="margin-top: 8px;"><i class="fa-solid fa-paperclip"></i> ${escapeHTML(n.fileName)}</a>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function deleteNote(id) {
+      if (confirm("Delete this note?")) await db.collection("keep_notes").doc(id).delete();
     }
 
     function escapeHTML(str) {
-        return String(str || '').replace(/[&<>'"]/g, 
-            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-        );
+      return String(str || '').replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
     }
 
     // INIT
-    window.addEventListener("load", function() {
-        applyTheme(localStorage.getItem("resume_theme") || "light");
-        const hash = window.location.hash;
-        if (hash && document.getElementById(hash.substring(1))) {
-            showSection(hash.substring(1));
-        } else {
-            showSection("Home");
-        }
+    window.addEventListener("load", () => {
+      setTheme(localStorage.getItem("user_theme") || "light");
+      const hash = window.location.hash;
+      if (hash && document.getElementById(hash.substring(1))) {
+        navigateTo(hash.substring(1));
+      } else {
+        navigateTo("Home");
+      }
     });
-</script>
-
+  </script>
 </body>
 </html>
