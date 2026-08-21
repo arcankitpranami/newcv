@@ -115,8 +115,12 @@
       transition: color 0.25s, transform 0.25s;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       position: relative;
+    }
+
+    .nav-links a i {
+      font-size: 13px;
     }
 
     .nav-links a.active,
@@ -657,6 +661,20 @@
       text-align: center;
     }
 
+    .forgot-link {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--text-light);
+      text-decoration: underline;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: color 0.2s;
+    }
+
+    .forgot-link:hover {
+      color: var(--text-main);
+    }
+
     /* Mobile Responsive */
     @media (max-width: 900px) {
       body {
@@ -724,14 +742,14 @@
     </div>
 
     <ul class="nav-links">
-      <li><a href="#Home" class="active">HOME</a></li>
-      <li><a href="#About">ABOUT</a></li>
-      <li><a href="#Work">WORK PROFILE</a></li>
-      <li><a href="#Portfolio">PORTFOLIO</a></li>
-      <li><a href="#Education">EDUCATION</a></li>
-      <li><a href="#Contact">CONTACT</a></li>
-      <li id="adminNav" style="display: none;"><a href="#Admin">INBOX <span class="sidebar-badge" id="inboxBadge">0</span></a></li>
-      <li id="notesNav" style="display: none;"><a href="#Notes">NOTES <span class="sidebar-badge" id="notesBadge">0</span></a></li>
+      <li><a href="#Home" class="active"><i class="fa-solid fa-house"></i> HOME</a></li>
+      <li><a href="#About"><i class="fa-solid fa-user"></i> ABOUT</a></li>
+      <li><a href="#Work"><i class="fa-solid fa-chart-line"></i> WORK PROFILE</a></li>
+      <li><a href="#Portfolio"><i class="fa-solid fa-briefcase"></i> PORTFOLIO</a></li>
+      <li><a href="#Education"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</a></li>
+      <li><a href="#Contact"><i class="fa-solid fa-envelope"></i> CONTACT</a></li>
+      <li id="adminNav" style="display: none;"><a href="#Admin"><i class="fa-solid fa-inbox"></i> INBOX <span class="sidebar-badge" id="inboxBadge">0</span></a></li>
+      <li id="notesNav" style="display: none;"><a href="#Notes"><i class="fa-solid fa-note-sticky"></i> NOTES <span class="sidebar-badge" id="notesBadge">0</span></a></li>
     </ul>
 
     <div class="sidebar-footer">
@@ -963,7 +981,7 @@
 
   </main>
 
-  <!-- Login Modal -->
+  <!-- Login & Reset Modal -->
   <div id="authModal">
     <div class="modal-content">
       <h3 style="font-size: 16px; color: var(--text-main); margin-bottom: 8px;">Firebase Admin Login</h3>
@@ -975,7 +993,13 @@
       <div class="form-group">
         <input type="password" id="adminPass" placeholder="Password" style="text-align: center;">
       </div>
+      
+      <div>
+        <a class="forgot-link" onclick="handleForgotPassword()"><i class="fa-solid fa-key"></i> Forgot Password?</a>
+      </div>
+
       <p id="loginError" style="color: #ef4444; font-size: 11px; margin-bottom: 10px; display: none;"></p>
+      <p id="loginSuccess" style="color: #10b981; font-size: 11px; margin-bottom: 10px; display: none;"></p>
       
       <div style="display: flex; gap: 10px;">
         <button class="btn-main" style="flex: 1; justify-content: center;" id="modalLoginBtn" onclick="attemptLogin()">Login</button>
@@ -1046,7 +1070,7 @@
       });
     });
 
-    // 4. AUTHENTICATION
+    // 4. AUTHENTICATION & FORGOT PASSWORD
     auth.onAuthStateChanged(user => {
       const adminNav = document.getElementById("adminNav");
       const notesNav = document.getElementById("notesNav");
@@ -1084,6 +1108,7 @@
         document.getElementById("adminEmail").value = "";
         document.getElementById("adminPass").value = "";
         document.getElementById("loginError").style.display = "none";
+        document.getElementById("loginSuccess").style.display = "none";
       }
     }
 
@@ -1095,7 +1120,11 @@
       const email = document.getElementById("adminEmail").value.trim();
       const pass = document.getElementById("adminPass").value.trim();
       const errBox = document.getElementById("loginError");
+      const successBox = document.getElementById("loginSuccess");
       const btn = document.getElementById("modalLoginBtn");
+
+      errBox.style.display = "none";
+      successBox.style.display = "none";
 
       if (!email || !pass) {
         errBox.textContent = "Please provide email and password.";
@@ -1118,6 +1147,31 @@
         .finally(() => {
           btn.disabled = false;
           btn.innerHTML = 'Login';
+        });
+    }
+
+    function handleForgotPassword() {
+      const email = document.getElementById("adminEmail").value.trim();
+      const errBox = document.getElementById("loginError");
+      const successBox = document.getElementById("loginSuccess");
+
+      errBox.style.display = "none";
+      successBox.style.display = "none";
+
+      if (!email) {
+        errBox.textContent = "Please enter your email above to reset password.";
+        errBox.style.display = "block";
+        return;
+      }
+
+      auth.sendPasswordResetEmail(email)
+        .then(() => {
+          successBox.textContent = "Password reset link sent to your email!";
+          successBox.style.display = "block";
+        })
+        .catch(err => {
+          errBox.textContent = err.message;
+          errBox.style.display = "block";
         });
     }
 
